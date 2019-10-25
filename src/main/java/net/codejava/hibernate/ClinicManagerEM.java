@@ -341,8 +341,8 @@ public class ClinicManagerEM {
 		ClinicManagerEM manager = new ClinicManagerEM();
 		manager.setup();
 
-                MainWindow mw = new MainWindow(manager);
-                mw.setVisible(true);
+                MainWindow m = new MainWindow(manager);
+                m.setVisible(true);
                 
 		//create patients
 		manager.createPatient("pietro", "ducange", "female", "pisa", "yesterday", "pietroducange@plasmon.it", "duc1");				
