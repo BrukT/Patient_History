@@ -96,6 +96,32 @@ public class ClinicManagerEM {
 		}
 	}
 	
+	public Patient readPatient(String taxCode){                
+		Patient p = null;
+		try{
+			entityManager = factory.createEntityManager();
+			entityManager.getTransaction().begin();
+
+			Query query = entityManager.createQuery("SELECT p FROM Patient p WHERE p.taxCode = '" + taxCode + "'");
+			List<Patient> patientList = query.getResultList();
+			if(patientList.size() != 0){
+				p = patientList.get(0);
+			}
+			else{
+				throw new EntityNotFoundException();
+			}
+
+		} catch (EntityNotFoundException e) {
+			System.out.println("readPatient -  taxCode not found");
+		} catch (Exception e) {
+			System.out.println("Exception in readPatient");
+		} finally{
+			entityManager.getTransaction().commit();
+			entityManager.close();
+			return p;
+		}
+	}
+	
 	public List<Examination> readPatientExaminations(String taxCode){
                 Patient p = null;
 		try{
@@ -122,8 +148,8 @@ public class ClinicManagerEM {
 		} finally{
 			entityManager.getTransaction().commit();
 			entityManager.close();
+			return p.getExaminations();
 		}
-                return p.getExaminations();
 	}
 	
 	public void deletePatient(String taxCode) {
@@ -276,6 +302,27 @@ public class ClinicManagerEM {
 		}finally {
 			entityManager.getTransaction().commit();
 			entityManager.close();//the entity manager must be always closed
+		}
+	}
+	
+	public Doctor readDoctor(int doctorId){                
+		Doctor d = null;
+		try{
+			entityManager = factory.createEntityManager();
+			entityManager.getTransaction().begin();
+
+			d = entityManager.find(Doctor.class, doctorId);
+			if(d == null){
+				throw new EntityNotFoundException();
+			}
+		} catch (EntityNotFoundException e) {
+			System.out.println("readDoctor -  doctorId not found");
+		} catch (Exception e) {
+			System.out.println("Exception in doctorId");
+		} finally{
+			entityManager.getTransaction().commit();
+			entityManager.close();
+			return d;
 		}
 	}
 
