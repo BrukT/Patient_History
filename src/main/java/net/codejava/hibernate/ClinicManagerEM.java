@@ -96,7 +96,8 @@ public class ClinicManagerEM {
 		}
 	}
 	
-	public void readPatientExaminations(String taxCode){
+	public List<Examination> readPatientExaminations(String taxCode){
+                Patient p = null;
 		try{
 			entityManager = factory.createEntityManager();
 			entityManager.getTransaction().begin();
@@ -104,7 +105,7 @@ public class ClinicManagerEM {
 			Query query = entityManager.createQuery("SELECT p FROM Patient p WHERE p.taxCode = '" + taxCode + "'");
 			List<Patient> patientList = query.getResultList();
 			if(patientList.size() != 0){
-				Patient p = patientList.get(0);
+				p = patientList.get(0);
 				System.out.println("Patient: "+p.getName()+" "+p.getSurname());
 				p.getExaminations().forEach((x) -> {
 					System.out.println(x);
@@ -122,6 +123,7 @@ public class ClinicManagerEM {
 			entityManager.getTransaction().commit();
 			entityManager.close();
 		}
+                return p.getExaminations();
 	}
 	
 	public void deletePatient(String taxCode) {
@@ -277,12 +279,13 @@ public class ClinicManagerEM {
 		}
 	}
 
-	public void readDoctorExaminations(int doctorId){
+	public List<Examination> readDoctorExaminations(int doctorId){
+                Doctor d = null;
 		try{
 			entityManager = factory.createEntityManager();
 			entityManager.getTransaction().begin();
 
-			Doctor d = entityManager.find(Doctor.class, doctorId);
+			d = entityManager.find(Doctor.class, doctorId);
 			if(d != null){
 				System.out.println("Doctor " + d.getName() + " " + d.getSurname());
 				d.getExaminations().forEach((x) -> {
@@ -298,9 +301,13 @@ public class ClinicManagerEM {
 		} catch (Exception e) {
 			System.out.println("Exception in readDoctorExaminations");
 		} finally{
+                        
 			entityManager.getTransaction().commit();
 			entityManager.close();
+                        
 		}
+                
+                return d.getExaminations();
 	}
 	
 	public void deleteDoctor(int doctorId) {

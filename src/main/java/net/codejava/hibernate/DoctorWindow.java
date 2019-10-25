@@ -2,6 +2,8 @@ package net.codejava.hibernate;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -40,20 +42,17 @@ public class DoctorWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         TFPatient = new javax.swing.JTextField();
         ButtonInsertTest = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        ButtonDocTests = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         TFDoc = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
+        ButtonPatientTests = new javax.swing.JButton();
         ButtonInfo = new javax.swing.JButton();
 
         setTitle("Doctor");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Visit ID", "Doc Name", "Doc Surname", "P Name", "P Surname", "Date", "Type", "Result"
@@ -76,16 +75,6 @@ public class DoctorWindow extends javax.swing.JFrame {
         });
         jTable1.setEnabled(false);
         jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setHeaderValue("Visit ID");
-            jTable1.getColumnModel().getColumn(1).setHeaderValue("Doc Name");
-            jTable1.getColumnModel().getColumn(2).setHeaderValue("Doc Surname");
-            jTable1.getColumnModel().getColumn(3).setHeaderValue("P Name");
-            jTable1.getColumnModel().getColumn(4).setHeaderValue("P Surname");
-            jTable1.getColumnModel().getColumn(5).setHeaderValue("Date");
-            jTable1.getColumnModel().getColumn(6).setHeaderValue("Type");
-            jTable1.getColumnModel().getColumn(7).setHeaderValue("Result");
-        }
 
         jLabel1.setText("Patient tax code");
 
@@ -101,15 +90,15 @@ public class DoctorWindow extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Show doctor tests");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        ButtonDocTests.setText("Show doctor tests");
+        ButtonDocTests.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+                ButtonDocTestsMouseClicked(evt);
             }
         });
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        ButtonDocTests.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                ButtonDocTestsActionPerformed(evt);
             }
         });
 
@@ -121,10 +110,15 @@ public class DoctorWindow extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Show tests");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        ButtonPatientTests.setText("Show tests");
+        ButtonPatientTests.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ButtonPatientTestsMouseClicked(evt);
+            }
+        });
+        ButtonPatientTests.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                ButtonPatientTestsActionPerformed(evt);
             }
         });
 
@@ -152,7 +146,7 @@ public class DoctorWindow extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(TFDoc, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2)
+                        .addComponent(ButtonDocTests)
                         .addGap(18, 18, 18)
                         .addComponent(ButtonInfo))
                     .addGroup(layout.createSequentialGroup()
@@ -162,7 +156,7 @@ public class DoctorWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(ButtonInsertTest)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton4)))
+                        .addComponent(ButtonPatientTests)))
                 .addContainerGap(313, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -177,13 +171,13 @@ public class DoctorWindow extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(TFDoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ButtonInfo)
-                    .addComponent(jButton2))
+                    .addComponent(ButtonDocTests))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(TFPatient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ButtonInsertTest)
-                    .addComponent(jButton4))
+                    .addComponent(ButtonPatientTests))
                 .addGap(30, 30, 30)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
@@ -197,21 +191,27 @@ public class DoctorWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ButtonInsertTestActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void ButtonDocTestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDocTestsActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_ButtonDocTestsActionPerformed
 
     private void TFDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TFDocActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TFDocActionPerformed
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+    private void ButtonDocTestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonDocTestsMouseClicked
+        //List<Examination> list = manager.readDoctorExaminations(Integer.parseInt(TFDoc.getText()));
+        Object[] row = new Object[8];
+        for(int i=0; i<8; ++i) {
+            row[i] = "cj";
+        }
+        DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
+        d.addRow(row);
+    }//GEN-LAST:event_ButtonDocTestsMouseClicked
 
-    }//GEN-LAST:event_jButton2MouseClicked
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void ButtonPatientTestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonPatientTestsActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_ButtonPatientTestsActionPerformed
 
     private void ButtonInfoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonInfoMouseClicked
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -238,14 +238,19 @@ public class DoctorWindow extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_ButtonInsertTestMouseClicked
 
+    private void ButtonPatientTestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonPatientTestsMouseClicked
+        // TODO add your handling code here:
+        List<Examination> list = manager.readPatientExaminations(TFPatient.getText());
+    }//GEN-LAST:event_ButtonPatientTestsMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonDocTests;
     private javax.swing.JButton ButtonInfo;
     private javax.swing.JButton ButtonInsertTest;
+    private javax.swing.JButton ButtonPatientTests;
     private javax.swing.JTextField TFDoc;
     private javax.swing.JTextField TFPatient;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
