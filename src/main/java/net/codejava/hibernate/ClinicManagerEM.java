@@ -419,7 +419,7 @@ public class ClinicManagerEM {
 		id.setExamDate("5 nov");
 		manager.updateExamination(id, "positive");
 		manager.readDoctorExaminations(1);
-		
+				
 		System.out.println("-----");
 		//manager.deletePatient("duc1");
 		//manager.deleteDoctor(1);

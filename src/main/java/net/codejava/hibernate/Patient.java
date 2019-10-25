@@ -94,7 +94,7 @@ public class Patient {
 
 	@Override
 	public String toString() {
-		return "Patient{" + "patientId=" + patientId + ", taxCode=" + taxCode + ", name=" + name + ", surname=" + surname + ", sex=" + sex + ", birthDate=" + birthDate + ", city=" + city + ", email=" + email + ", examinations=" + examinations + '}';
+		return "Patient{" + "patientId=" + patientId + ", taxCode=" + taxCode + ", name=" + name + ", surname=" + surname + ", sex=" + sex + ", birthDate=" + birthDate + ", city=" + city + ", email=" + email + '}';
 	}
 
 	public List<Examination> getExaminations() {

@@ -61,4 +61,9 @@ public class Doctor implements Serializable {
 		return examinations;
 	}
 
+	@Override
+	public String toString() {
+		return "Doctor{" + "doctorId=" + doctorId + ", name=" + name + ", surname=" + surname + ", email=" + email + '}';
+	}
+	
 }
