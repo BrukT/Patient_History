@@ -428,11 +428,6 @@ public class ClinicManagerEM {
 		//create doctor
 		manager.createDoctor(1, "Jack", "The Reaper", "aaa@bb.cc");
 		manager.createDoctor(2, "Lord", "Voldemort", "tom.riddle@student.hogwarts.uk");
-	
-                
-		
-
-		manager.readDoctorExaminations(1);
 		
 		System.out.println("-----");
 		//manager.deletePatient("duc1");
