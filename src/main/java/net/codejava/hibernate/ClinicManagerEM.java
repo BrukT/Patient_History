@@ -428,11 +428,8 @@ public class ClinicManagerEM {
 		//create doctor
 		manager.createDoctor(1, "Jack", "The Reaper", "aaa@bb.cc");
 		manager.createDoctor(2, "Lord", "Voldemort", "tom.riddle@student.hogwarts.uk");
-		//create examinations
-
-		manager.createExamination(1, 1, "fever", "almost fine", "2019-10-11 21:22:01");
-		
-
+	
+                
 		
 
 		manager.readDoctorExaminations(1);
