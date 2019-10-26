@@ -5,13 +5,14 @@
  */
 package net.codejava.hibernate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "patient")
-public class Patient {
+public class Patient implements Serializable{
 
 	@Column(name = "patientId")
 	@Id

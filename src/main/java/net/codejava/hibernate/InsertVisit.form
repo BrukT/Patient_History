@@ -8,6 +8,9 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -36,11 +39,11 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="TFPatient" alignment="0" pref="108" max="32767" attributes="0"/>
+                          <Component id="TFPatient" alignment="0" max="32767" attributes="0"/>
                           <Component id="TFDocID" alignment="0" max="32767" attributes="0"/>
                           <Component id="TFDate" alignment="0" max="32767" attributes="0"/>
                           <Component id="TFType" alignment="0" max="32767" attributes="0"/>
-                          <Component id="TFResult" alignment="0" max="32767" attributes="0"/>
+                          <Component id="CBResult" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -48,7 +51,7 @@
                       <Component id="SubmitButton" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="50" max="32767" attributes="0"/>
+              <EmptySpace pref="38" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -78,7 +81,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="TFResult" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="CBResult" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="28" max="32767" attributes="0"/>
               <Component id="SubmitButton" min="-2" max="-2" attributes="0"/>
@@ -130,8 +133,6 @@
         <Property name="text" type="java.lang.String" value="Result"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="TFResult">
-    </Component>
     <Component class="javax.swing.JButton" name="SubmitButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Submit"/>
@@ -140,6 +141,20 @@
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="SubmitButtonMouseClicked"/>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SubmitButtonActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="CBResult">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="3">
+            <StringItem index="0" value="not available"/>
+            <StringItem index="1" value="negative "/>
+            <StringItem index="2" value="positive"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

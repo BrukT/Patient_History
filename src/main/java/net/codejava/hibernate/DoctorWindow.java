@@ -47,6 +47,7 @@ public class DoctorWindow extends javax.swing.JFrame {
         TFDoc = new javax.swing.JTextField();
         ButtonPatientTests = new javax.swing.JButton();
         ButtonInfo = new javax.swing.JButton();
+        ButtonResult = new javax.swing.JButton();
 
         setTitle("Doctor");
 
@@ -55,14 +56,14 @@ public class DoctorWindow extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Visit ID", "Doc Name", "Doc Surname", "P Name", "P Surname", "Date", "Type", "Result"
+                "Visit ID", "Doc Name", "Doc Surname", "Doc Mail", "P Name", "P Surname", "P Taxcode", "Date", "Type", "Result"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true, true
+                false, false, false, false, false, false, false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -134,6 +135,19 @@ public class DoctorWindow extends javax.swing.JFrame {
             }
         });
 
+        ButtonResult.setText("Insert result");
+        ButtonResult.setToolTipText("");
+        ButtonResult.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ButtonResultMouseClicked(evt);
+            }
+        });
+        ButtonResult.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonResultActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -156,8 +170,10 @@ public class DoctorWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(ButtonInsertTest)
                         .addGap(18, 18, 18)
-                        .addComponent(ButtonPatientTests)))
-                .addContainerGap(313, Short.MAX_VALUE))
+                        .addComponent(ButtonPatientTests)
+                        .addGap(18, 18, 18)
+                        .addComponent(ButtonResult)))
+                .addContainerGap(223, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1)
@@ -177,10 +193,11 @@ public class DoctorWindow extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(TFPatient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ButtonInsertTest)
-                    .addComponent(ButtonPatientTests))
-                .addGap(30, 30, 30)
+                    .addComponent(ButtonPatientTests)
+                    .addComponent(ButtonResult))
+                .addGap(36, 36, 36)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -200,13 +217,28 @@ public class DoctorWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_TFDocActionPerformed
 
     private void ButtonDocTestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonDocTestsMouseClicked
-        //List<Examination> list = manager.readDoctorExaminations(Integer.parseInt(TFDoc.getText()));
-        Object[] row = new Object[8];
-        for(int i=0; i<8; ++i) {
-            row[i] = "cj";
-        }
+       
+        List<Examination> list = manager.readDoctorExaminations(Integer.parseInt(TFDoc.getText()));
         DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
-        d.addRow(row);
+        d.setRowCount(0);
+        int num_col = 10;
+        Object[] row = new Object[num_col];
+        
+        for(int j=0; j<list.size(); ++j) {
+            Examination e = list.get(j);
+            row[0] = e.getId();
+            row[1] = e.getDoctor().getName();
+            row[2] = e.getDoctor().getSurname();
+            row[3] = e.getDoctor().getEmail();
+            row[4] = e.getPatient().getName();
+            row[5] = e.getPatient().getSurname();
+            row[6] = e.getPatient().getTaxCode();
+            row[7] = e.getDate();
+            row[8] = e.getType();
+            row[9] = e.getResult();
+            d.addRow(row);
+        }
+        
     }//GEN-LAST:event_ButtonDocTestsMouseClicked
 
     private void ButtonPatientTestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonPatientTestsActionPerformed
@@ -217,7 +249,9 @@ public class DoctorWindow extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 DoctorInfo di = new DoctorInfo(manager);
+                di.set_id(Integer.parseInt(TFDoc.getText()));
                 di.setVisible(true);
+      
             }
         });
     }//GEN-LAST:event_ButtonInfoMouseClicked
@@ -229,11 +263,10 @@ public class DoctorWindow extends javax.swing.JFrame {
     private void ButtonInsertTestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonInsertTestMouseClicked
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                InsertVisit iv = new InsertVisit(manager);
-                iv.setVisible(true);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Date d = new Date();
-                iv.set_TF(TFDoc.getText(), TFPatient.getText(), sdf.format(d));
+                InsertVisit iv = new InsertVisit(manager, TFDoc.getText(), TFPatient.getText(), sdf.format(d));
+                iv.setVisible(true);
             }
         });
     }//GEN-LAST:event_ButtonInsertTestMouseClicked
@@ -241,7 +274,40 @@ public class DoctorWindow extends javax.swing.JFrame {
     private void ButtonPatientTestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonPatientTestsMouseClicked
         // TODO add your handling code here:
         List<Examination> list = manager.readPatientExaminations(TFPatient.getText());
+        DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
+        d.setRowCount(0);
+        int num_col = 10;
+        Object[] row = new Object[num_col];
+        
+        for(int j=0; j<list.size(); ++j) {
+            Examination e = list.get(j);
+            row[0] = e.getId();
+            row[1] = e.getDoctor().getName();
+            row[2] = e.getDoctor().getSurname();
+            row[3] = e.getDoctor().getEmail();
+            row[4] = e.getPatient().getName();
+            row[5] = e.getPatient().getSurname();
+            row[6] = e.getPatient().getTaxCode();
+            row[7] = e.getDate();
+            row[8] = e.getType();
+            row[9] = e.getResult();
+            d.addRow(row);
+        }
     }//GEN-LAST:event_ButtonPatientTestsMouseClicked
+
+    private void ButtonResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonResultActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonResultActionPerformed
+
+    private void ButtonResultMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonResultMouseClicked
+        // TODO add your handling code here:
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                InsertResult ir = new InsertResult(manager);
+                ir.setVisible(true);
+            }
+        });
+    }//GEN-LAST:event_ButtonResultMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -249,6 +315,7 @@ public class DoctorWindow extends javax.swing.JFrame {
     private javax.swing.JButton ButtonInfo;
     private javax.swing.JButton ButtonInsertTest;
     private javax.swing.JButton ButtonPatientTests;
+    private javax.swing.JButton ButtonResult;
     private javax.swing.JTextField TFDoc;
     private javax.swing.JTextField TFPatient;
     private javax.swing.JLabel jLabel1;

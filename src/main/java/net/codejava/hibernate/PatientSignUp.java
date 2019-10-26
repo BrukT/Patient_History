@@ -17,6 +17,7 @@ public class PatientSignUp extends javax.swing.JFrame {
      */
     
     private ClinicManagerEM manager;
+    private String taxCode;
     
     public PatientSignUp(ClinicManagerEM m) {
         initComponents();
@@ -49,6 +50,11 @@ public class PatientSignUp extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
 
         setTitle("Sign Up");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("Name");
 
@@ -171,9 +177,27 @@ public class PatientSignUp extends javax.swing.JFrame {
 
     private void ButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSaveMouseClicked
         // TODO add your handling code here:
-        manager.createPatient(TFName.getText(), TFSurname.getText(), TFSex.getText(), TFCity.getText(), TFBirth.getText(), TFMail.getText(), TFTaxcode.getText());
+        if(TFName.isEnabled()) 
+            manager.createPatient(TFName.getText(), TFSurname.getText(), TFSex.getText(), TFCity.getText(), TFBirth.getText(), TFMail.getText(), TFTaxcode.getText());
+        else 
+            manager.updatePatientInfo(taxCode, TFCity.getText(), TFMail.getText());
+       
         setVisible(false);
     }//GEN-LAST:event_ButtonSaveMouseClicked
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        if(!TFName.isEnabled()) {
+            Patient p = manager.readPatient(taxCode);
+            TFName.setText(p.getName());
+            TFSurname.setText(p.getSurname());
+            TFTaxcode.setText(taxCode);
+            TFBirth.setText(p.getBirthDate());
+            TFSex.setText(p.getSex());
+            TFCity.setText(p.getCity());
+            TFMail.setText(p.getEmail());
+        } 
+    }//GEN-LAST:event_formWindowOpened
 
     void disable_textFields() {
         TFName.setEnabled(false);
@@ -181,6 +205,10 @@ public class PatientSignUp extends javax.swing.JFrame {
         TFTaxcode.setEnabled(false);
         TFBirth.setEnabled(false);
         TFSex.setEnabled(false);
+    }
+    
+    void set_taxcode(String t) {
+        taxCode = t;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

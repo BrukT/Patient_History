@@ -11,30 +11,34 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "examination")
-public class Examination implements Serializable {
-    @EmbeddedId
-    private ExaminationId examinationId;
+public class Examination  {
+    @Column(name = "ExamId")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int examinationId;
        
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("patientId")
+    @ManyToOne(fetch = FetchType.EAGER)
+    //@MapsId("patientId")
     @JoinColumn(name = "patient")
     private Patient patient;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("doctorId")
+    @ManyToOne(fetch = FetchType.EAGER)
+   // @MapsId("doctorId")
     @JoinColumn(name = "doctor")
     private Doctor doctor;
+    
+    private String examDate;
     
     private String type;
     
     @Column(nullable = true)
     private String result;              //results might be unavailable
     
-    public ExaminationId getId() {
+    public int getId() {
         return examinationId;
     }
 
-    public void setId(ExaminationId id) {
+    public void setId(int id) {
         this.examinationId = id;
     }
 
@@ -60,6 +64,15 @@ public class Examination implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    
+    }
+    
+    public String getDate() {
+        return examDate;
+    }
+
+    public void setDate(String date) {
+        this.examDate = date;
     }
 
     public String getResult() {
@@ -70,9 +83,9 @@ public class Examination implements Serializable {
         this.result = result;
     }
 
-    @Override
-    public String toString() {
-            return "Examination{" + "date=" + examinationId.getExamDate() + ", type=" + type + ", result=" + result + '}';
-    }
-
-}
+	@Override
+	public String toString() {
+		return "Examination{" + examinationId +  " date=" + examDate + ", type=" + type + ", result=" + result + '}';
+	}
+   
+   }

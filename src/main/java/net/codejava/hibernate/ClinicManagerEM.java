@@ -179,6 +179,38 @@ public class ClinicManagerEM {
 		}
 
 	}
+
+	public void deleteVisit(String visitId, int patientId) {
+		//due to CASCADE property, when you delete a patient you also delete all the 
+		//examination he had
+		try {
+			entityManager = factory.createEntityManager();
+			entityManager.getTransaction().begin();
+			
+			Query query = entityManager.createQuery("SELECT e FROM Examination e WHERE e.examinationId = '" + visitId + "'");
+			List<Examination> examList = query.getResultList();
+			if (examList.size() == 1) {
+				Examination e = examList.get(0);
+                                if (e.getPatient().getPatientId() == patientId) {
+                                    entityManager.remove(e);			
+                                } else {
+                                    throw new EntityNotFoundException();
+                                }
+			} else {
+				throw new EntityNotFoundException();
+			}
+		} catch(EntityNotFoundException e){
+			System.out.println("deleteExam -  not found");
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			System.out.println("Exception in deleteExam");
+
+		} finally {
+			entityManager.getTransaction().commit();
+			entityManager.close();
+		}
+
+	}
 	
 	//-----------------END OF PATIENT METHODS
 	
@@ -235,14 +267,11 @@ public class ClinicManagerEM {
 	}
 
 	public void createExamination(int patientId, int doctorId, String type, String result, String examDate) {
-		ExaminationId examinationId = new ExaminationId();
-		examinationId.setPatientId(patientId);
-		examinationId.setDoctorId(doctorId);
-		examinationId.setExamDate(examDate);
+
 
 		Examination examination = new Examination();
-		examination.setId(examinationId);       //important
 		examination.setType(type);
+                examination.setDate(examDate);
 		if (result != null)				//leaving result field blank in gui won't insert any result (null)
 			examination.setResult(result);
 		
@@ -260,17 +289,13 @@ public class ClinicManagerEM {
 
 			//find the doctor
 			Doctor doctor = entityManager.find(Doctor.class, doctorId);
+                        
 			if (doctor == null) {
 				throw new Exception();
 			}
 			examination.setDoctor(doctor);
+			entityManager.persist(examination);
 
-			Examination e = entityManager.find(Examination.class, examinationId);
-			if (e == null) {
-				entityManager.persist(examination);
-			} else {
-				throw new EntityExistsException();
-			}
 		} catch (EntityExistsException e) {
 			System.out.println("createExamination - Entity already exists");
 		} catch (Exception e) {
@@ -281,7 +306,7 @@ public class ClinicManagerEM {
 		}
 	}
 
-	public void updateExamination(ExaminationId id, String result) {
+	public void updateExamination(int id, String result) {
 		System.out.println("--Updating a Examination");
 		try {
 			entityManager = factory.createEntityManager();
@@ -352,8 +377,7 @@ public class ClinicManagerEM {
 			entityManager.getTransaction().commit();
 			entityManager.close();
                         
-		}
-                
+		}                
                 return d.getExaminations();
 	}
 	
@@ -399,31 +423,23 @@ public class ClinicManagerEM {
                 m.setVisible(true);
                 
 		//create patients
-		manager.createPatient("pietro", "ducange", "female", "pisa", "yesterday", "pietroducange@plasmon.it", "duc1");				
-		manager.createPatient("enzo", "mingozzi", "male", "pisa", "1 jan 1970", "enzomingozzi@skynet.com", "ming1");
+		manager.createPatient("pietro", "ducange", "female", "pisa", "1980-01-23", "pietroducange@plasmon.it", "duc1");				
+		manager.createPatient("enzo", "mingozzi", "male", "pisa", "1964-09-10", "enzomingozzi@skynet.com", "ming1");
 		//create doctor
 		manager.createDoctor(1, "Jack", "The Reaper", "aaa@bb.cc");
 		manager.createDoctor(2, "Lord", "Voldemort", "tom.riddle@student.hogwarts.uk");
 		//create examinations
-		manager.createExamination(1, 1, "headache", null, "5 nov");
-		manager.createExamination(1, 1, "fever", "almost fine", "6 nov");
+
+		manager.createExamination(1, 1, "fever", "almost fine", "2019-10-11 21:22:01");
 		
-		manager.updateDoctorInfo(1, "mymail@hospital.it");
-		manager.updatePatientInfo("duc1", "livorno", null);
-		manager.readPatientExaminations("duc1");
-		System.out.println("-----");
+
 		
-		ExaminationId id = new ExaminationId();		
-		id.setDoctorId(1);
-		id.setPatientId(1);
-		id.setExamDate("5 nov");
-		manager.updateExamination(id, "positive");
+
 		manager.readDoctorExaminations(1);
-				
+		
 		System.out.println("-----");
 		//manager.deletePatient("duc1");
 		//manager.deleteDoctor(1);
-		manager.exit();
 		System.out.println("Finished");
 
 	}

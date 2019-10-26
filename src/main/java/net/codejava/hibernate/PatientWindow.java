@@ -1,5 +1,8 @@
 package net.codejava.hibernate;
 
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -34,12 +37,13 @@ public class PatientWindow extends javax.swing.JFrame {
 
         SignUpButton = new javax.swing.JButton();
         ButtonInfo = new javax.swing.JButton();
-        TFTaxcode = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        TFPatient = new javax.swing.JTextField();
+        ButtonTests = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         ButtonDelete = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        ButtonDeleteaccount = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setTitle("Patient");
 
@@ -62,44 +66,58 @@ public class PatientWindow extends javax.swing.JFrame {
             }
         });
 
-        TFTaxcode.addActionListener(new java.awt.event.ActionListener() {
+        TFPatient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TFTaxcodeActionPerformed(evt);
+                TFPatientActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Show your tests");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        ButtonTests.setText("Show your tests");
+        ButtonTests.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ButtonTestsMouseClicked(evt);
+            }
+        });
+        ButtonTests.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                ButtonTestsActionPerformed(evt);
             }
         });
 
         jLabel1.setText("Enter your tax code");
 
-        ButtonDelete.setText("Delete patient");
+        ButtonDelete.setText("Delete visit");
         ButtonDelete.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ButtonDeleteMouseClicked(evt);
             }
         });
+        ButtonDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonDeleteActionPerformed(evt);
+            }
+        });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        ButtonDeleteaccount.setText("Delete account");
+        ButtonDeleteaccount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ButtonDeleteaccountMouseClicked(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Visit ID", "Doc Name", "Doc Surname", "P Name", "P Surname", "Date", "Type", "Result"
+                "Visit ID", "Doc Name", "Doc Surname", "Doc Mail", "P Name", "P Surname", "P Taxcode", "Date", "Type", "Result"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true, true
+                false, false, false, false, false, false, false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -110,39 +128,32 @@ public class PatientWindow extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable2.setEnabled(false);
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(30, 30, 30)
-                                        .addComponent(SignUpButton))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(22, 22, 22)
-                                        .addComponent(jLabel1)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(TFTaxcode, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(177, 177, 177))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(73, 73, 73)
-                                .addComponent(ButtonInfo)
-                                .addGap(36, 36, 36)
-                                .addComponent(jButton3)
-                                .addGap(45, 45, 45)
-                                .addComponent(ButtonDelete)))
-                        .addGap(0, 175, Short.MAX_VALUE))
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(TFPatient, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(SignUpButton)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2)))
+                        .addComponent(ButtonInfo)
+                        .addGap(36, 36, 36)
+                        .addComponent(ButtonTests)
+                        .addGap(35, 35, 35)
+                        .addComponent(ButtonDelete)
+                        .addGap(39, 39, 39)
+                        .addComponent(ButtonDeleteaccount)))
+                .addContainerGap(346, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -150,18 +161,19 @@ public class PatientWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(SignUpButton)
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TFTaxcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TFPatient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(18, 18, 18)
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
+                    .addComponent(ButtonTests)
                     .addComponent(ButtonDelete)
-                    .addComponent(ButtonInfo))
-                .addGap(41, 41, 41)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                    .addComponent(ButtonInfo)
+                    .addComponent(ButtonDeleteaccount))
+                .addGap(35, 35, 35)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         pack();
@@ -172,9 +184,9 @@ public class PatientWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_SignUpButtonActionPerformed
 
-    private void TFTaxcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TFTaxcodeActionPerformed
+    private void TFPatientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TFPatientActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TFTaxcodeActionPerformed
+    }//GEN-LAST:event_TFPatientActionPerformed
 
     private void SignUpButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SignUpButtonMouseClicked
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -190,30 +202,91 @@ public class PatientWindow extends javax.swing.JFrame {
                 PatientSignUp change_info = new PatientSignUp(manager);
                 change_info.setVisible(true);
                 change_info.setTitle("Patient Info");
+                change_info.set_taxcode(TFPatient.getText());
                 change_info.disable_textFields();
                 
             }
         });    
     }//GEN-LAST:event_ButtonInfoMouseClicked
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void ButtonTestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTestsActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_ButtonTestsActionPerformed
 
     private void ButtonDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonDeleteMouseClicked
         // TODO add your handling code here:
-        manager.deletePatient(TFTaxcode.getText());
+        int rowIndex = jTable1.getSelectedRow();
+        String visitID = jTable1.getValueAt(rowIndex, 0).toString();
+        Patient p = manager.readPatient(TFPatient.getText());
+        manager.deleteVisit(visitID, p.getPatientId());
+        
+        List<Examination> list = manager.readPatientExaminations(TFPatient.getText());
+        DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
+        d.setRowCount(0);
+        int num_col = 10;
+        Object[] row = new Object[num_col];
+        
+        for(int j=0; j<list.size(); ++j) {
+            Examination e = list.get(j);
+            row[0] = e.getId();
+            row[1] = e.getDoctor().getName();
+            row[2] = e.getDoctor().getSurname();
+            row[3] = e.getDoctor().getEmail();
+            row[4] = e.getPatient().getName();
+            row[5] = e.getPatient().getSurname();
+            row[6] = e.getPatient().getTaxCode();
+            row[7] = e.getDate();
+            row[8] = e.getType();
+            row[9] = e.getResult();
+            d.addRow(row);
+        }
     }//GEN-LAST:event_ButtonDeleteMouseClicked
+
+    private void ButtonTestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonTestsMouseClicked
+        // TODO add your handling code here:
+        List<Examination> list = manager.readPatientExaminations(TFPatient.getText());
+        DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
+        d.setRowCount(0);
+        int num_col = 10;
+        Object[] row = new Object[num_col];
+        
+        for(int j=0; j<list.size(); ++j) {
+            Examination e = list.get(j);
+            row[0] = e.getId();
+            row[1] = e.getDoctor().getName();
+            row[2] = e.getDoctor().getSurname();
+            row[3] = e.getDoctor().getEmail();
+            row[4] = e.getPatient().getName();
+            row[5] = e.getPatient().getSurname();
+            row[6] = e.getPatient().getTaxCode();
+            row[7] = e.getDate();
+            row[8] = e.getType();
+            row[9] = e.getResult();
+            d.addRow(row);
+        }
+    }//GEN-LAST:event_ButtonTestsMouseClicked
+
+    private void ButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDeleteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonDeleteActionPerformed
+
+    private void ButtonDeleteaccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonDeleteaccountMouseClicked
+        // TODO add your handling code here:
+        manager.deletePatient(TFPatient.getText());
+        DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
+        d.setRowCount(0);
+    }//GEN-LAST:event_ButtonDeleteaccountMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonDelete;
+    private javax.swing.JButton ButtonDeleteaccount;
     private javax.swing.JButton ButtonInfo;
+    private javax.swing.JButton ButtonTests;
     private javax.swing.JButton SignUpButton;
-    private javax.swing.JTextField TFTaxcode;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JTextField TFPatient;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

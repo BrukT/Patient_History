@@ -17,10 +17,16 @@ public class InsertVisit extends javax.swing.JFrame {
      */
     
     private ClinicManagerEM manager;
+    private String docID;
+    private String patient;
+    private String date;
     
-    public InsertVisit(ClinicManagerEM m) {
+    public InsertVisit(ClinicManagerEM m, String d, String p, String dt) {
         initComponents();
         manager = m;
+        docID = d;
+        patient = p;
+        date = dt;
     }
 
     /**
@@ -41,10 +47,15 @@ public class InsertVisit extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         TFType = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        TFResult = new javax.swing.JTextField();
         SubmitButton = new javax.swing.JButton();
+        CBResult = new javax.swing.JComboBox<>();
 
         setTitle("Insert visit");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("Patient");
 
@@ -74,6 +85,8 @@ public class InsertVisit extends javax.swing.JFrame {
             }
         });
 
+        CBResult.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "not available", "negative ", "positive" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,15 +103,15 @@ public class InsertVisit extends javax.swing.JFrame {
                             .addComponent(jLabel5))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(TFPatient, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                            .addComponent(TFPatient)
                             .addComponent(TFDocID)
                             .addComponent(TFDate)
                             .addComponent(TFType)
-                            .addComponent(TFResult)))
+                            .addComponent(CBResult, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(158, 158, 158)
                         .addComponent(SubmitButton)))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,7 +135,7 @@ public class InsertVisit extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(TFResult, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(CBResult, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(SubmitButton)
                 .addContainerGap())
@@ -138,14 +151,25 @@ public class InsertVisit extends javax.swing.JFrame {
 
     private void SubmitButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SubmitButtonMouseClicked
         // TODO add your handling code here:
+        int id = manager.readPatient(patient).getPatientId();
+        manager.createExamination(id, Integer.parseInt(docID), TFType.getText(), CBResult.getSelectedItem().toString(), date);
+        setVisible(false);
     }//GEN-LAST:event_SubmitButtonMouseClicked
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        TFDocID.setText(docID);
+        TFDate.setText(date);
+        TFPatient.setText(patient);
+        
+    }//GEN-LAST:event_formWindowOpened
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> CBResult;
     private javax.swing.JButton SubmitButton;
     private javax.swing.JTextField TFDate;
     private javax.swing.JTextField TFDocID;
     private javax.swing.JTextField TFPatient;
-    private javax.swing.JTextField TFResult;
     private javax.swing.JTextField TFType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -154,10 +178,5 @@ public class InsertVisit extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     // End of variables declaration//GEN-END:variables
 
-    void set_TF(String p, String doc, String date) {
-        TFDocID.setText(doc);
-        TFPatient.setText(p);
-        TFDate.setText(date);
-    }
 
 }

@@ -43,9 +43,11 @@
                       <Component id="ButtonInsertTest" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="ButtonPatientTests" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="ButtonResult" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="313" max="32767" attributes="0"/>
+              <EmptySpace pref="223" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
@@ -70,10 +72,11 @@
                   <Component id="TFPatient" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ButtonInsertTest" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ButtonPatientTests" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ButtonResult" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="155" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -89,19 +92,31 @@
         <Component class="javax.swing.JTable" name="jTable1">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="8" rowCount="0">
+              <Table columnCount="10" rowCount="0">
                 <Column editable="false" title="Visit ID" type="java.lang.Integer"/>
                 <Column editable="false" title="Doc Name" type="java.lang.String"/>
                 <Column editable="false" title="Doc Surname" type="java.lang.String"/>
+                <Column editable="false" title="Doc Mail" type="java.lang.String"/>
                 <Column editable="false" title="P Name" type="java.lang.String"/>
                 <Column editable="false" title="P Surname" type="java.lang.String"/>
-                <Column editable="false" title="Date" type="java.lang.Object"/>
-                <Column editable="true" title="Type" type="java.lang.Object"/>
-                <Column editable="true" title="Result" type="java.lang.Object"/>
+                <Column editable="false" title="P Taxcode" type="java.lang.String"/>
+                <Column editable="true" title="Date" type="java.lang.String"/>
+                <Column editable="false" title="Type" type="java.lang.String"/>
+                <Column editable="false" title="Result" type="java.lang.String"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>
@@ -203,6 +218,16 @@
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ButtonInfoMouseClicked"/>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonInfoActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="ButtonResult">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Insert result"/>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ButtonResultMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonResultActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
