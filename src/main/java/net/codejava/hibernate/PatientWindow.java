@@ -293,6 +293,11 @@ public class PatientWindow extends javax.swing.JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainWindow(manager).setVisible(true);
+            }
+        });
         this.dispose();
     }//GEN-LAST:event_jButton1MouseClicked
 
