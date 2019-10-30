@@ -298,7 +298,7 @@ public class PatientWindow extends javax.swing.JFrame {
                 new MainWindow(manager).setVisible(true);
             }
         });
-        this.dispose();
+        this.setVisible(false);
     }//GEN-LAST:event_jButton1MouseClicked
 
 
