@@ -225,6 +225,26 @@ public class levelDBManager {
 		return examinations;
 	}
 	
+	public void updateExamination(int examinationId, String result){
+		String myKey = "examinationId:" + examinationId + ":";
+		DBIterator iterator = levelDBStore.iterator();
+		iterator.seek(bytes(myKey)); // starts from the specified key		
+		while (iterator.hasNext()){
+			byte[] key = iterator.peekNext().getKey();
+			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
+			
+			String[] keySplit = asString(key).split(":"); // split the key
+			if (!keySplit[0].equals("examinationId") || !keySplit[1].equals(Integer.toString(examinationId))) { 
+				break;
+			}
+			else if(keySplit[4].equals("result")){
+				put(asString(key), result);
+			}
+			
+			iterator.next();
+		}
+	}
+	
 	/**
 	 *Close the levelDB store
 	 */
@@ -259,6 +279,11 @@ public class levelDBManager {
 		return examinationId;
 	}
 	
+	public int incrementAndGetPatientId(){
+		patientId++;
+		return patientId;
+	}
+	
 	
 	
 	public static void main(String[] args) {
@@ -280,7 +305,7 @@ public class levelDBManager {
 		
 		System.out.println(d);
 		System.out.println("-----");
-		l.putExamination("duc1", 1, "blood", "negative", "yesterday");
+		l.putExamination("duc1", 1, "blood", "not available", "yesterday");
 		l.putExamination("duc1", 1, "head", "positive", "20 oct");
 		System.out.println("\n\n\n-----");
 		System.out.println("-----");
@@ -294,6 +319,14 @@ public class levelDBManager {
 		});
 		
 		
+		l.dumpLevelDB();
+		System.out.println("-----");
+		System.out.println("-----\n\n\n");
+		
+		l.updateExamination(1, "good!!!");
+		
+		System.out.println("-----");
+		System.out.println("-----");		
 		l.dumpLevelDB();
 		l.close();
 		System.out.println("Finished");
