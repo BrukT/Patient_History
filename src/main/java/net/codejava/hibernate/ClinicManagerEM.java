@@ -415,6 +415,7 @@ public class ClinicManagerEM {
 	//-----------------MAIN METHOD
 	public static void main(String[] args) {
                 
+		/*
 		// code to run the program
 		ClinicManagerEM manager = new ClinicManagerEM();
 		manager.setup();
@@ -428,10 +429,17 @@ public class ClinicManagerEM {
 		//create doctor
 		manager.createDoctor(1, "Jack", "The Reaper", "aaa@bb.cc");
 		manager.createDoctor(2, "Lord", "Voldemort", "tom.riddle@student.hogwarts.uk");
-		
+		*/
 		System.out.println("-----");
 		//manager.deletePatient("duc1");
 		//manager.deleteDoctor(1);
+		
+		levelDBManager l = new levelDBManager();
+		l.init("mystore");
+		
+		l.put("patient:1:name", "myname");
+		System.out.println(l.get("patient:1:name"));
+		
 		System.out.println("Finished");
 
 	}
