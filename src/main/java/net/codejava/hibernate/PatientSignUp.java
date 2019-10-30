@@ -4,9 +4,6 @@ package net.codejava.hibernate;
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
- */
-
-/**
  *
  * @author nicom
  */
@@ -15,10 +12,9 @@ public class PatientSignUp extends javax.swing.JFrame {
     /**
      * Creates new form PatientSignIn
      */
-    
     private ClinicManagerEM manager;
     private String taxCode;
-    
+
     public PatientSignUp(ClinicManagerEM m) {
         initComponents();
         manager = m;
@@ -177,17 +173,22 @@ public class PatientSignUp extends javax.swing.JFrame {
 
     private void ButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSaveMouseClicked
         // TODO add your handling code here:
-        if(TFName.isEnabled()) 
+        if (TFName.isEnabled()) {
             manager.createPatient(TFName.getText(), TFSurname.getText(), TFSex.getText(), TFCity.getText(), TFBirth.getText(), TFMail.getText(), TFTaxcode.getText());
-        else 
+        } else {
             manager.updatePatientInfo(taxCode, TFCity.getText(), TFMail.getText());
-       
-        setVisible(false);
+        }
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new PatientWindow(manager).setVisible(true);
+            }
+        });
+        this.dispose();
     }//GEN-LAST:event_ButtonSaveMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        if(!TFName.isEnabled()) {
+        if (!TFName.isEnabled()) {
             Patient p = manager.readPatient(taxCode);
             TFName.setText(p.getName());
             TFSurname.setText(p.getSurname());
@@ -196,7 +197,7 @@ public class PatientSignUp extends javax.swing.JFrame {
             TFSex.setText(p.getSex());
             TFCity.setText(p.getCity());
             TFMail.setText(p.getEmail());
-        } 
+        }
     }//GEN-LAST:event_formWindowOpened
 
     void disable_textFields() {
@@ -206,7 +207,7 @@ public class PatientSignUp extends javax.swing.JFrame {
         TFBirth.setEnabled(false);
         TFSex.setEnabled(false);
     }
-    
+
     void set_taxcode(String t) {
         taxCode = t;
     }

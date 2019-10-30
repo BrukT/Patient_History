@@ -207,7 +207,8 @@ public class PatientWindow extends javax.swing.JFrame {
             public void run() {
                 new PatientSignUp(manager).setVisible(true);
             }
-        });        // TODO add your handling code here:
+        });
+        this.dispose();
     }//GEN-LAST:event_SignUpButtonMouseClicked
 
     private void ButtonInfoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonInfoMouseClicked
@@ -220,7 +221,8 @@ public class PatientWindow extends javax.swing.JFrame {
                 change_info.disable_textFields();
                 
             }
-        });    
+        });
+        this.dispose();
     }//GEN-LAST:event_ButtonInfoMouseClicked
 
     private void ButtonTestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTestsActionPerformed
