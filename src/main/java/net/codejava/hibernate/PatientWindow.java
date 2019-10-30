@@ -46,6 +46,7 @@ public class PatientWindow extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Patient");
 
         SignUpButton.setText("Sign Up");
@@ -293,7 +294,12 @@ public class PatientWindow extends javax.swing.JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
-        this.dispose();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainWindow(manager).setVisible(true);
+            }
+        });
+        this.setVisible(false);
     }//GEN-LAST:event_jButton1MouseClicked
 
 
