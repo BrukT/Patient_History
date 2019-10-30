@@ -65,5 +65,17 @@ public class Doctor implements Serializable {
 	public String toString() {
 		return "Doctor{" + "doctorId=" + doctorId + ", name=" + name + ", surname=" + surname + ", email=" + email + '}';
 	}
+
+	public Doctor(){
+		
+	}
+
+	public Doctor(int doctorId, String name, String surname, String email) {
+		this.doctorId = doctorId;
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+	}
+	
 	
 }

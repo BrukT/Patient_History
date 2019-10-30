@@ -5,8 +5,6 @@
  */
 package net.codejava.hibernate;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
 import javax.persistence.*;
 
 @Entity
@@ -88,4 +86,18 @@ public class Examination  {
 		return "Examination{" + examinationId +  " date=" + examDate + ", type=" + type + ", result=" + result + '}';
 	}
    
+	public Examination(){
+		
+	}
+
+	public Examination(int examinationId, Patient patient, Doctor doctor, String examDate, String type, String result) {
+		this.examinationId = examinationId;
+		this.patient = patient;
+		this.doctor = doctor;
+		this.examDate = examDate;
+		this.type = type;
+		this.result = result;
+	}
+	
+	
    }

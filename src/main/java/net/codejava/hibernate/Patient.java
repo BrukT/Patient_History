@@ -102,4 +102,18 @@ public class Patient implements Serializable{
 		return examinations;
 	}
 
+	public Patient(){
+		
+	}
+	
+	public Patient(String taxCode, String name, String surname, String sex, String birthDate, String city, String email) {		
+		this.taxCode = taxCode;
+		this.name = name;
+		this.surname = surname;
+		this.sex = sex;
+		this.birthDate = birthDate;
+		this.city = city;
+		this.email = email;
+	}
+
 }
