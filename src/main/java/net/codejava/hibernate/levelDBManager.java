@@ -41,6 +41,18 @@ public class levelDBManager {
 		levelDBStore.delete(bytes(key));
 	}
 	
+	
+	public void putPatient(String name, String surname, String sex, String city, String birthDate, String email, String taxCode){		
+		String key = "patientId:" + taxCode + ":";
+		
+		put(key+"name", name);
+		put(key+"surname", surname);
+		put(key+"sex", sex);
+		put(key+"city", city);
+		put(key+"birthDate", birthDate);
+		put(key+"email", email);
+	}
+	
 	/**
 	 *Close the levelDB store
 	 */
@@ -51,5 +63,18 @@ public class levelDBManager {
 		} catch (IOException ex) {
 			Logger.getLogger(levelDBManager.class.getName()).log(Level.SEVERE, null, ex);
 		}
+	}
+	
+	
+	public static void main(String[] args) {
+		System.out.println("-----");
+		
+		levelDBManager l = new levelDBManager();
+		l.init("mystore");
+		
+		
+		
+		l.close();
+		System.out.println("Finished");
 	}
 }
