@@ -46,6 +46,7 @@ public class PatientWindow extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Patient");
 
         SignUpButton.setText("Sign Up");
