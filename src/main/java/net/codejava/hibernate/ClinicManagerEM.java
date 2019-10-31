@@ -27,7 +27,7 @@ public class ClinicManagerEM {
 	
 	//-----------------PATIENT METHODS
 	
-	public void createPatient(String name, String surname, String sex, String city, String birthDate, String email, String taxCode) {
+	public void createPatient(String name, String surname, String sex, String city, String birthDate, String email, String taxCode, String pwd) {
 
 		Patient patient = new Patient();
 		patient.setSurname(surname);
@@ -37,6 +37,7 @@ public class ClinicManagerEM {
 		patient.setEmail(email);
 		patient.setSex(sex);
 		patient.setTaxCode(taxCode);
+		patient.setPwdHash(Hash.getSHA256(pwd));
 
 		try {
 			entityManager = factory.createEntityManager();
@@ -115,6 +116,22 @@ public class ClinicManagerEM {
 			entityManager.getTransaction().commit();
 			entityManager.close();
 			return p;
+		}
+	}
+	
+	public String loginPatient(String taxCode, String pwd){
+		String pwdHash = Hash.getSHA256(pwd);
+		Patient p = readPatient(taxCode);
+		if(p == null)	//no patient found
+			return null;
+		System.out.println("proposed hash: " +pwdHash);
+		String patientPwdHash = p.getPwdHash();
+		System.out.println("patient: "+patientPwdHash);
+		if(pwdHash.equals(patientPwdHash)){
+			return taxCode;
+		}
+		else{
+			return null;	//pwd not matching
 		}
 	}
 	
@@ -420,8 +437,8 @@ public class ClinicManagerEM {
 		m.setVisible(true);
                 
 		//create patients
-		manager.createPatient("pietro", "ducange", "female", "pisa", "1980-01-23", "pietroducange@plasmon.it", "duc1");				
-		manager.createPatient("enzo", "mingozzi", "male", "pisa", "1964-09-10", "enzomingozzi@skynet.com", "ming1");
+		manager.createPatient("pietro", "ducange", "female", "pisa", "1980-01-23", "pietroducange@plasmon.it", "duc1", "pwd1");				
+		manager.createPatient("enzo", "mingozzi", "male", "pisa", "1964-09-10", "enzomingozzi@skynet.com", "ming1", "pwd2");
 		//create doctor
 		manager.createDoctor(1, "Jack", "The Reaper", "aaa@bb.cc");
 		manager.createDoctor(2, "Lord", "Voldemort", "tom.riddle@student.hogwarts.uk");
@@ -429,7 +446,6 @@ public class ClinicManagerEM {
 		System.out.println("-----");
 		//manager.deletePatient("duc1");
 		//manager.deleteDoctor(1);
-		
 		
 		System.out.println("Finished");
 

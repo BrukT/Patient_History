@@ -115,7 +115,7 @@ public class Patient implements Serializable{
 		
 	}
 	
-	public Patient(String taxCode, String name, String surname, String sex, String birthDate, String city, String email) {		
+	public Patient(String taxCode, String name, String surname, String sex, String birthDate, String city, String email, String pwdHash) {		
 		this.taxCode = taxCode;
 		this.name = name;
 		this.surname = surname;
@@ -123,6 +123,7 @@ public class Patient implements Serializable{
 		this.birthDate = birthDate;
 		this.city = city;
 		this.email = email;
+		this.pwdHash = pwdHash;
 	}
 
 }

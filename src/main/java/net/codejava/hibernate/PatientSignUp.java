@@ -178,7 +178,7 @@ public class PatientSignUp extends javax.swing.JFrame {
     private void ButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSaveMouseClicked
         // TODO add your handling code here:
         if(TFName.isEnabled()) 
-            manager.createPatient(TFName.getText(), TFSurname.getText(), TFSex.getText(), TFCity.getText(), TFBirth.getText(), TFMail.getText(), TFTaxcode.getText());
+            manager.createPatient(TFName.getText(), TFSurname.getText(), TFSex.getText(), TFCity.getText(), TFBirth.getText(), TFMail.getText(), TFTaxcode.getText(), null);
         else 
             manager.updatePatientInfo(taxCode, TFCity.getText(), TFMail.getText());
        

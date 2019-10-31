@@ -8,6 +8,7 @@ package net.codejava.hibernate;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -118,8 +119,8 @@ public class levelDBManager {
 		put(key+"sex", sex);
 		put(key+"city", city);
 		put(key+"birthDate", birthDate);
-		put(key+"email", email);		
-		put(key+"password", asString(Hash.getSHA256(password)));		//pwd hash 
+		put(key+"email", email);				
+		put(key+"password", Hash.getSHA256(password));		//pwd hash 
 	}
 	
 	public Patient readPatient(String taxCode){
@@ -143,7 +144,7 @@ public class levelDBManager {
 			i++;
 		}
 		
-		Patient p = new Patient(taxCode, param.get(3), param.get(5), param.get(4), param.get(0), param.get(1), param.get(2));
+		Patient p = new Patient(taxCode, param.get(3), param.get(6), param.get(5), param.get(0), param.get(1), param.get(2), param.get(4));
 		return p;
 	}
 	
@@ -301,11 +302,12 @@ public class levelDBManager {
 		l.init("mystore");
 		System.out.println("Current= doc:"+l.getDoctorId()+"\tex:"+l.getExaminationId()+"\tpat:"+l.getPatientId());
 		
-		l.putPatient("pietro", "ducange", "male", "pisa", "1 jan 1970", "aa.bb@das.c", "duc1", "myPassword");
+		l.putPatient("pietro", "ducange", "male", "pisa", "1 jan 1970", "aa.bb@das.c", "duc1", "pepeaa");
 		
 		Patient p = l.readPatient("duc1");
 		System.out.println("-----");
-		System.out.println(p);
+		System.out.print(p);
+		System.out.println("\tpwd: "+p.getPwdHash());
 		
 		System.out.println("--------------");
 		l.putDoctor("serial", "killer", "reaper@live.it");
@@ -339,7 +341,7 @@ public class levelDBManager {
 		
 		
 		System.out.println(Hash.getSHA256("pepeaa"));
-		String h = l.loginPatient("pep");
+		String h = l.loginPatient("pepeaa");
 		System.out.println("duc1\t->"+h);
 		
 		

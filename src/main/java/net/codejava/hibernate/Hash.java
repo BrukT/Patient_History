@@ -8,6 +8,7 @@ package net.codejava.hibernate;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
  * @author giacomo
  */
 public class Hash {
-	public static byte [] getSHA256(String s){
+	public static String getSHA256(String s){
 		if(s == null)
 			return null;
 		MessageDigest md = null;
@@ -26,8 +27,10 @@ public class Hash {
 			Logger.getLogger(Hash.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		
-		if(md != null)
-			return md.digest(s.getBytes(StandardCharsets.UTF_8));
+		if(md != null){
+			String hash = Base64.getEncoder().encodeToString(md.digest(s.getBytes(StandardCharsets.UTF_8)));
+			return hash;
+		}
 		else 
 			return null;
 	}
