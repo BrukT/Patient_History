@@ -150,26 +150,18 @@ public class levelDBManager {
 	
 	//-----------------PATIENT METHODS
 	
-	public void putPatient(String name, String surname, String sex, String city, String birthDate, String email, String taxCode, String password){		
+	public void putPatient(String name, String surname, String email, String taxCode){		
 		String key = "patientId:" + taxCode + ":";
 		
 		put(key+"name", name);
 		put(key+"surname", surname);
-		put(key+"sex", sex);
-		put(key+"city", city);
-		put(key+"birthDate", birthDate);
 		put(key+"email", email);				
-		put(key+"password", Hash.getSHA256(password));		//pwd hash 
 	}
 	
-	public void updatePatientInfo(String taxCode, String city, String email, String pwd) {
+	public void updatePatientInfo(String taxCode, String email) {
 		String key = "patientId:" + taxCode + ":";
-		if(city != null)
-			put(key+"city", city);
 		if(email != null)
 			put(key+"email", email);
-		if(pwd != null)
-			put(key+"password", Hash.getSHA256(pwd));
 	}
 	
 	public Patient readPatient(String taxCode){
@@ -192,8 +184,8 @@ public class levelDBManager {
 			iterator.next();
 			i++;
 		}
-		
-		Patient p = new Patient(taxCode, param.get(3), param.get(6), param.get(5), param.get(0), param.get(1), param.get(2), param.get(4));
+		//taxCode, name, surname, email     -> no more
+                Patient p = new Patient(taxCode, param.get(1), param.get(2), null, null, null, param.get(0), null);
 		return p;
 	}
 	
@@ -280,21 +272,18 @@ public class levelDBManager {
 	
 	//-----------------DOCTOR METHODS
 	
-	public void putDoctor(String name, String surname, String email, String password){
+	public void putDoctor(String name, String surname, String email){
 		String key = "doctorId:" + incrementAndGetDoctorId() + ":";
 		
 		put(key+"name", name);
 		put(key+"surname", surname);
 		put(key+"email", email);	
-		put(key+"password", Hash.getSHA256(password));
 	}
 	
-	public void updateDoctorInfo(int doctorId, String email, String pwd) {
+	public void updateDoctorInfo(int doctorId, String email) {
 		String key = "doctorId:" + doctorId + ":";		
 		if(email != null)
 			put(key+"email", email);
-		if(pwd != null)
-			put(key+"password", Hash.getSHA256(pwd));
 	}
 	
 	public Doctor readDoctor(int doctorId){
@@ -320,7 +309,7 @@ public class levelDBManager {
 			i++;
 		}
 		
-		Doctor d = new Doctor(doctorId, param.get(1), param.get(3), param.get(0), param.get(2));
+		Doctor d = new Doctor(doctorId, param.get(1), param.get(2), param.get(0), null);
 		return d;
 	}
 	
@@ -429,23 +418,20 @@ public class levelDBManager {
 		l.init("mystore");
 		System.out.println("Current= doc:"+l.getDoctorId()+"\tex:"+l.getExaminationId()+"\tpat:"+l.getPatientId());
 		
-		l.putPatient("pietro", "ducange", "male", "pisa", "1 jan 1970", "aa.bb@das.c", "duc1", "pepeaa");
-		
+		l.putPatient("pietro", "ducange", "aa.bb@das.c", "duc1");
+		l.dumpLevelDB();
 		Patient p = l.readPatient("duc1");
 		System.out.println("-----");
-		System.out.print(p);
-		System.out.println("\tpwd: "+p.getPwdHash());
-		l.updatePatientInfo("duc1", "milano", "changed@gmail.com", "newhash");
+		System.out.println(p);
+		l.updatePatientInfo("duc1", "changed@gmail.com");
 		p = l.readPatient("duc1");
 		System.out.println("-----");
-		System.out.print(p);
-		System.out.println("\tpwd: "+p.getPwdHash());
+		System.out.println(p);
 		
 		System.out.println("--------------");
-		l.putDoctor("serial", "killer", "reaper@live.it", "docpassword");
+		l.putDoctor("serial", "killer", "reaper@live.it");
 		Doctor d = l.readDoctor(1);		
-		System.out.print(d);
-		System.out.println("\tpwd: "+d.getPwdHash());
+		System.out.println(d);
 		System.out.println("-----");
 		l.putExamination("duc1", 1, "blood", "not available", "yesterday");
 		l.putExamination("duc1", 1, "head", "positive", "20 oct");
@@ -470,12 +456,7 @@ public class levelDBManager {
 		System.out.println("-----");
 		System.out.println("-----");		
 		l.dumpLevelDB();
-		
-		
-		System.out.println(Hash.getSHA256("pepeaa"));
-		String h = l.loginPatient("duc1", "newhash");
-		System.out.println("duc1\t->"+h);
-		
+				
 		System.out.println("-----");		
 		l.readDoctorExamination(1);
 				
