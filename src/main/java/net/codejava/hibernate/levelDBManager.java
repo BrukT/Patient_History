@@ -5,7 +5,6 @@
  */
 package net.codejava.hibernate;
 
-import com.sun.jmx.defaults.ServiceName;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
