@@ -183,10 +183,14 @@ public class levelDBManager {
 		return d;
 	}
 	
-	public String loginPatient(String taxCode){
+	public String loginPatient(String taxCode, String pwd){
+		String proposedPwdHash = Hash.getSHA256(pwd);
 		String key = "patientId:" + taxCode + ":password";	
-		String pwdHash = get(key);	//null if no user		
-		return pwdHash;
+		String pwdHash = get(key);	//null if no user	
+		if(pwdHash != null && pwdHash.equals(proposedPwdHash))
+			return taxCode;
+		else
+			return null;
 	}
 	
 	public void putExamination(String taxCode, int doctorId, String type, String result, String examDate){
@@ -341,7 +345,7 @@ public class levelDBManager {
 		
 		
 		System.out.println(Hash.getSHA256("pepeaa"));
-		String h = l.loginPatient("pepeaa");
+		String h = l.loginPatient("duc1", "pepeaa");
 		System.out.println("duc1\t->"+h);
 		
 		
