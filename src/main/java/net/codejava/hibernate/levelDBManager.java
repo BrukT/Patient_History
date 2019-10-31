@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javassist.compiler.TokenId;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.DBIterator;
 import static org.iq80.leveldb.impl.Iq80DBFactory.factory;
@@ -109,7 +110,7 @@ public class levelDBManager {
 	
 	
 	
-	public void putPatient(String name, String surname, String sex, String city, String birthDate, String email, String taxCode){		
+	public void putPatient(String name, String surname, String sex, String city, String birthDate, String email, String taxCode, String password){		
 		String key = "patientId:" + taxCode + ":";
 		
 		put(key+"name", name);
@@ -117,7 +118,8 @@ public class levelDBManager {
 		put(key+"sex", sex);
 		put(key+"city", city);
 		put(key+"birthDate", birthDate);
-		put(key+"email", email);
+		put(key+"email", email);		
+		put(key+"password", asString(Hash.getSHA256(password)));		//pwd hash 
 	}
 	
 	public Patient readPatient(String taxCode){
@@ -178,6 +180,12 @@ public class levelDBManager {
 		
 		Doctor d = new Doctor(doctorId, param.get(1), param.get(2), param.get(0));
 		return d;
+	}
+	
+	public String loginPatient(String taxCode){
+		String key = "patientId:" + taxCode + ":password";	
+		String pwdHash = get(key);	//null if no user		
+		return pwdHash;
 	}
 	
 	public void putExamination(String taxCode, int doctorId, String type, String result, String examDate){
@@ -293,7 +301,7 @@ public class levelDBManager {
 		l.init("mystore");
 		System.out.println("Current= doc:"+l.getDoctorId()+"\tex:"+l.getExaminationId()+"\tpat:"+l.getPatientId());
 		
-		l.putPatient("pietro", "ducange", "male", "pisa", "1 jan 1970", "aa.bb@das.c", "duc1");
+		l.putPatient("pietro", "ducange", "male", "pisa", "1 jan 1970", "aa.bb@das.c", "duc1", "myPassword");
 		
 		Patient p = l.readPatient("duc1");
 		System.out.println("-----");
@@ -328,6 +336,16 @@ public class levelDBManager {
 		System.out.println("-----");
 		System.out.println("-----");		
 		l.dumpLevelDB();
+		
+		
+		System.out.println(Hash.getSHA256("pepeaa"));
+		String h = l.loginPatient("pep");
+		System.out.println("duc1\t->"+h);
+		
+		
+		
+		
+		
 		l.close();
 		System.out.println("Finished");
 	}

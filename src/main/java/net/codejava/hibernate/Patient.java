@@ -25,6 +25,7 @@ public class Patient implements Serializable{
 	private String birthDate;
 	private String city;
 	private String email;
+	private String pwdHash;
 
 	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<Examination> examinations = new ArrayList<>();
@@ -91,6 +92,14 @@ public class Patient implements Serializable{
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPwdHash() {
+		return pwdHash;
+	}
+
+	public void setPwdHash(String pwdHash) {
+		this.pwdHash = pwdHash;
 	}
 
 	@Override
