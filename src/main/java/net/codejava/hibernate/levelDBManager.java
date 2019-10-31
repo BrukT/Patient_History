@@ -107,6 +107,7 @@ public class levelDBManager {
 			// whatever you want to do
 			iterator.next();
 		}
+		System.out.println("----------- END DUMP ---------");
 	}
 	
 	
@@ -148,12 +149,13 @@ public class levelDBManager {
 		return p;
 	}
 	
-	public void putDoctor(String name, String surname, String email){
+	public void putDoctor(String name, String surname, String email, String password){
 		String key = "doctorId:" + incrementAndGetDoctorId() + ":";
 		
 		put(key+"name", name);
 		put(key+"surname", surname);
-		put(key+"email", email);				
+		put(key+"email", email);	
+		put(key+"password", Hash.getSHA256(password));
 	}
 	
 	public Doctor readDoctor(int doctorId){
@@ -179,7 +181,7 @@ public class levelDBManager {
 			i++;
 		}
 		
-		Doctor d = new Doctor(doctorId, param.get(1), param.get(2), param.get(0));
+		Doctor d = new Doctor(doctorId, param.get(1), param.get(3), param.get(0), param.get(2));
 		return d;
 	}
 	
@@ -314,10 +316,10 @@ public class levelDBManager {
 		System.out.println("\tpwd: "+p.getPwdHash());
 		
 		System.out.println("--------------");
-		l.putDoctor("serial", "killer", "reaper@live.it");
-		Doctor d = l.readDoctor(1);
-		
-		System.out.println(d);
+		l.putDoctor("serial", "killer", "reaper@live.it", "docpassword");
+		Doctor d = l.readDoctor(1);		
+		System.out.print(d);
+		System.out.println("\tpwd: "+d.getPwdHash());
 		System.out.println("-----");
 		l.putExamination("duc1", 1, "blood", "not available", "yesterday");
 		l.putExamination("duc1", 1, "head", "positive", "20 oct");

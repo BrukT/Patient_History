@@ -162,7 +162,7 @@ public class DoctorInfo extends javax.swing.JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
-        manager.updateDoctorInfo(id, TFDocMail.getText());
+        manager.updateDoctorInfo(id, TFDocMail.getText(), null);
         setVisible(false);
     }//GEN-LAST:event_jButton1MouseClicked
 

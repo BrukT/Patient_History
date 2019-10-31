@@ -21,6 +21,7 @@ public class Doctor implements Serializable {
 	private String name;
 	private String surname;
 	private String email;
+	private String pwdHash;
 
 	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<Examination> examinations = new ArrayList<>();
@@ -57,6 +58,14 @@ public class Doctor implements Serializable {
 		this.email = email;
 	}
 
+	public String getPwdHash() {
+		return pwdHash;
+	}
+
+	public void setPwdHash(String pwdHash) {
+		this.pwdHash = pwdHash;
+	}
+	
 	public List<Examination> getExaminations() {
 		return examinations;
 	}
@@ -70,11 +79,12 @@ public class Doctor implements Serializable {
 		
 	}
 
-	public Doctor(int doctorId, String name, String surname, String email) {
+	public Doctor(int doctorId, String name, String surname, String email, String pwdHash) {
 		this.doctorId = doctorId;
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
+		this.pwdHash = pwdHash;
 	}
 	
 	

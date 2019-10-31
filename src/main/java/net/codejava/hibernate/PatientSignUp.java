@@ -180,7 +180,7 @@ public class PatientSignUp extends javax.swing.JFrame {
         if(TFName.isEnabled()) 
             manager.createPatient(TFName.getText(), TFSurname.getText(), TFSex.getText(), TFCity.getText(), TFBirth.getText(), TFMail.getText(), TFTaxcode.getText(), null);
         else 
-            manager.updatePatientInfo(taxCode, TFCity.getText(), TFMail.getText());
+            manager.updatePatientInfo(taxCode, TFCity.getText(), TFMail.getText(), null);
        
         setVisible(false);
     }//GEN-LAST:event_ButtonSaveMouseClicked

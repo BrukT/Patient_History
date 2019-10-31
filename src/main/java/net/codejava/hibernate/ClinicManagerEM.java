@@ -61,8 +61,8 @@ public class ClinicManagerEM {
 		}
 	}
 
-	public void updatePatientInfo(String taxCode, String city, String email) {
-		if(city == null && email == null)			//return if both blank (or prevent in gui class?)
+	public void updatePatientInfo(String taxCode, String city, String email, String pwd) {
+		if(city == null && email == null && pwd == null)			//return if both blank (or prevent in gui class?)
 			return;
 		try {
 			entityManager = factory.createEntityManager();
@@ -78,6 +78,8 @@ public class ClinicManagerEM {
 					p.setCity(city);						//update city
 				if(email != null)
 					p.setEmail(email);					//update email
+				if(pwd != null)
+					p.setPwdHash(Hash.getSHA256(pwd));		//				
 				
 				entityManager.merge(p);					//merge it				
 			} else {
@@ -227,11 +229,12 @@ public class ClinicManagerEM {
 	
 	//-----------------DOCTOR METHODS
 	
-	public void createDoctor(int doctorId, String name, String surname, String email) {
+	public void createDoctor(int doctorId, String name, String surname, String email, String pwd) {
 		Doctor doctor = new Doctor();
 		doctor.setSurname(surname);
 		doctor.setName(name);
 		doctor.setEmail(email);
+		doctor.setPwdHash(Hash.getSHA256(pwd));
 		try {
 			entityManager = factory.createEntityManager();
 			entityManager.getTransaction().begin();
@@ -252,8 +255,8 @@ public class ClinicManagerEM {
 		}
 	}
 	
-	public void updateDoctorInfo(int doctorId, String email) {
-		if(email == null)			//return if blank (or prevent in gui class?)
+	public void updateDoctorInfo(int doctorId, String email, String pwd) {
+		if(email == null && pwd == null)			//return if blank (or prevent in gui class?)
 			return;
 		try {
 			entityManager = factory.createEntityManager();
@@ -261,8 +264,11 @@ public class ClinicManagerEM {
 
 			//find that doctor			
 			Doctor d = entityManager.find(Doctor.class, doctorId);		
-			if (d != null) {				
-				d.setEmail(email);						//update email				
+			if (d != null) {			
+				if(email!=null)
+					d.setEmail(email);					//update email				
+				if(pwd!=null)
+					d.setPwdHash(Hash.getSHA256(pwd));		//update pwd
 				entityManager.merge(d);					//merge it				
 			} else {
 				throw new EntityNotFoundException();
@@ -274,6 +280,20 @@ public class ClinicManagerEM {
 		} finally {
 			entityManager.getTransaction().commit();		//commit
 			entityManager.close();
+		}
+	}
+	
+	public String loginDoctor(int doctorId, String pwd){
+		String pwdHash = Hash.getSHA256(pwd);
+		Doctor d = readDoctor(doctorId);
+		if(d == null)	//no doctor found
+			return null;
+		String doctorPwdHash = d.getPwdHash();
+		if(pwdHash.equals(doctorPwdHash)){
+			return Integer.toString(doctorId);
+		}
+		else{
+			return null;	//pwd not matching
 		}
 	}
 
@@ -438,8 +458,8 @@ public class ClinicManagerEM {
 		manager.createPatient("pietro", "ducange", "female", "pisa", "1980-01-23", "pietroducange@plasmon.it", "duc1", "pwd1");				
 		manager.createPatient("enzo", "mingozzi", "male", "pisa", "1964-09-10", "enzomingozzi@skynet.com", "ming1", "pwd2");
 		//create doctor
-		manager.createDoctor(1, "Jack", "The Reaper", "aaa@bb.cc");
-		manager.createDoctor(2, "Lord", "Voldemort", "tom.riddle@student.hogwarts.uk");
+		manager.createDoctor(1, "Jack", "The Reaper", "aaa@bb.cc", "doc1");
+		manager.createDoctor(2, "Lord", "Voldemort", "tom.riddle@student.hogwarts.uk", "doc2");
 		
 		System.out.println("-----");
 		//manager.deletePatient("duc1");
