@@ -5,14 +5,13 @@
  */
 package net.codejava.hibernate;
 
+import com.sun.jmx.defaults.ServiceName;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javassist.compiler.TokenId;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.DBIterator;
 import static org.iq80.leveldb.impl.Iq80DBFactory.factory;
@@ -27,6 +26,7 @@ public class levelDBManager {
 	private int examinationId;
 	private int patientId;
 	
+	//-----------------UTILITY METHODS
 		
 	public void init(String storeName){	//i.e. "levelDBStore"
 		try {
@@ -110,7 +110,45 @@ public class levelDBManager {
 		System.out.println("----------- END DUMP ---------");
 	}
 	
+	public void close(){
+		try {
+			levelDBStore.close();
+			
+		} catch (IOException ex) {
+			Logger.getLogger(levelDBManager.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	public int getDoctorId() {
+		return doctorId;
+	}
+
+	public int getExaminationId() {
+		return examinationId;
+	}
 	
+	public int getPatientId(){
+		return patientId;
+	}
+	
+	public int incrementAndGetDoctorId(){
+		doctorId++;
+		return  doctorId;
+	}
+	
+	public int incrementAndGetExaminationId(){
+		examinationId++;
+		return examinationId;
+	}
+	
+	public int incrementAndGetPatientId(){
+		patientId++;
+		return patientId;
+	}
+	
+	//-----------------END OF UTILITY METHODS
+	
+	//-----------------PATIENT METHODS
 	
 	public void putPatient(String name, String surname, String sex, String city, String birthDate, String email, String taxCode, String password){		
 		String key = "patientId:" + taxCode + ":";
@@ -149,6 +187,99 @@ public class levelDBManager {
 		return p;
 	}
 	
+	public String loginPatient(String taxCode, String pwd){
+		String proposedPwdHash = Hash.getSHA256(pwd);
+		String key = "patientId:" + taxCode + ":password";	
+		String pwdHash = get(key);	//null if no user	
+		if(pwdHash != null && pwdHash.equals(proposedPwdHash))
+			return taxCode;
+		else
+			return null;
+	}
+	
+	public void updatePatientInfo(String taxCode, String city, String email, String pwd) {
+		String key = "patientId:" + taxCode + ":";
+		if(city != null)
+			put(key+"city", city);
+		if(email != null)
+			put(key+"email", email);
+		if(pwd != null)
+			put(key+"password", Hash.getSHA256(pwd));
+	}
+	
+	public List<Examination> readPatientExamination(String taxCode){
+		String myKey = "examinationId:";
+		DBIterator iterator = levelDBStore.iterator();
+		iterator.seek(bytes(myKey)); // starts from the specified key
+		ArrayList<String> param = new ArrayList<>();
+		final List<Examination> examinations = new ArrayList<>();
+		int i = 0;
+		while (iterator.hasNext()){
+			byte[] key = iterator.peekNext().getKey();
+			// key arrangement : examinationId:$examination_id:$patient_id:$doctor_id:$attribute_name = $value			
+			String[] keySplit = asString(key).split(":"); // split the key
+			if(keySplit[2].equals(taxCode)){
+				byte[] value = iterator.peekNext().getValue();
+				//System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
+				param.add(asString(value));
+				i++;
+				if(i==3){
+					Patient p = readPatient(keySplit[2]);
+					Doctor d = readDoctor(Integer.parseInt(keySplit[3]));
+					Examination e = new Examination(Integer.parseInt(keySplit[1]), p, d, param.get(0), param.get(2), param.get(1));
+					examinations.add(e);
+					//System.out.println("//");
+					i=0;
+				}
+			}
+			else{
+				i = 0;
+			}
+			
+			// whatever you want to do
+			iterator.next();
+			
+		}
+		
+		return examinations;
+	}
+	
+	public void deletePatient(String taxCode) {
+		String myKey = "patientId:" + taxCode + ":";
+		DBIterator iterator = levelDBStore.iterator();
+		iterator.seek(bytes(myKey)); // starts from the specified key
+		while (iterator.hasNext()){
+			byte[] key = iterator.peekNext().getKey();
+			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
+			String[] keySplit = asString(key).split(":"); // split the key
+			if (!keySplit[0].equals("patientId") || !keySplit[1].equals(taxCode)) { // breaking condition : prefix is not "employee"
+				break;
+			}
+			delete(asString(key));
+			// whatever you want to do
+			iterator.next();
+		}
+	}
+	
+	public void deleteExaminations(String examinationId) {
+		String myKey = "examinationId:" + examinationId + ":";
+		DBIterator iterator = levelDBStore.iterator();
+		iterator.seek(bytes(myKey)); // starts from the specified key
+		while (iterator.hasNext()){
+			byte[] key = iterator.peekNext().getKey();			
+			String[] keySplit = asString(key).split(":"); // split the key
+			if (!keySplit[0].equals("examinationId") || !keySplit[1].equals(examinationId)) { // breaking condition : prefix is not "employee"
+				break;
+			}
+			delete(asString(key));			
+			iterator.next();
+		}
+	}
+	
+	//-----------------END OF PATIENT METHODS
+	
+	//-----------------DOCTOR METHODS
+	
 	public void putDoctor(String name, String surname, String email, String password){
 		String key = "doctorId:" + incrementAndGetDoctorId() + ":";
 		
@@ -185,25 +316,25 @@ public class levelDBManager {
 		return d;
 	}
 	
-	public String loginPatient(String taxCode, String pwd){
+	public String loginDoctor(int doctorId, String pwd){
 		String proposedPwdHash = Hash.getSHA256(pwd);
-		String key = "patientId:" + taxCode + ":password";	
+		String key = "patientId:" + doctorId + ":password";	
 		String pwdHash = get(key);	//null if no user	
 		if(pwdHash != null && pwdHash.equals(proposedPwdHash))
-			return taxCode;
+			return Integer.toString(doctorId);
 		else
 			return null;
 	}
 	
-	public void putExamination(String taxCode, int doctorId, String type, String result, String examDate){
-		String key = "examinationId:" + incrementAndGetExaminationId() + ":" + taxCode + ":" + doctorId + ":";
-		
-		put(key+"examDate", examDate);
-		put(key+"type", type);
-		put(key+"result", result);
+	public void updateDoctorInfo(int doctorId, String email, String pwd) {
+		String key = "doctorId:" + doctorId + ":";		
+		if(email != null)
+			put(key+"email", email);
+		if(pwd != null)
+			put(key+"password", Hash.getSHA256(pwd));
 	}
 	
-	public List<Examination> readPatientExamination(String taxCode){
+	public List<Examination> readDoctorExamination(int doctorId){
 		String myKey = "examinationId:";
 		DBIterator iterator = levelDBStore.iterator();
 		iterator.seek(bytes(myKey)); // starts from the specified key
@@ -214,9 +345,11 @@ public class levelDBManager {
 			byte[] key = iterator.peekNext().getKey();
 			// key arrangement : examinationId:$examination_id:$patient_id:$doctor_id:$attribute_name = $value			
 			String[] keySplit = asString(key).split(":"); // split the key
-			if(keySplit[2].equals(taxCode)){
+			if(!keySplit[0].equals("examinationId"))
+				break;
+			if(keySplit[3].equals(Integer.toString(doctorId))){
 				byte[] value = iterator.peekNext().getValue();
-				System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
+				//System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
 				param.add(asString(value));
 				i++;
 				if(i==3){
@@ -224,7 +357,7 @@ public class levelDBManager {
 					Doctor d = readDoctor(Integer.parseInt(keySplit[3]));
 					Examination e = new Examination(Integer.parseInt(keySplit[1]), p, d, param.get(0), param.get(2), param.get(1));
 					examinations.add(e);
-					System.out.println("//");
+					//System.out.println("//");
 					i=0;
 				}
 			}
@@ -239,6 +372,15 @@ public class levelDBManager {
 		
 		return examinations;
 	}
+	
+	
+	public void putExamination(String taxCode, int doctorId, String type, String result, String examDate){
+		String key = "examinationId:" + incrementAndGetExaminationId() + ":" + taxCode + ":" + doctorId + ":";
+		
+		put(key+"examDate", examDate);
+		put(key+"type", type);
+		put(key+"result", result);
+	}	
 	
 	public void updateExamination(int examinationId, String result){
 		String myKey = "examinationId:" + examinationId + ":";
@@ -260,46 +402,26 @@ public class levelDBManager {
 		}
 	}
 	
-	/**
-	 *Close the levelDB store
-	 */
-	public void close(){
-		try {
-			levelDBStore.close();
-			
-		} catch (IOException ex) {
-			Logger.getLogger(levelDBManager.class.getName()).log(Level.SEVERE, null, ex);
+	public void deleteDoctor(int doctorId) {
+		String myKey = "doctorId:" + doctorId + ":";
+		DBIterator iterator = levelDBStore.iterator();
+		iterator.seek(bytes(myKey)); // starts from the specified key
+		while (iterator.hasNext()){
+			byte[] key = iterator.peekNext().getKey();
+			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
+			String[] keySplit = asString(key).split(":"); // split the key
+			if (!keySplit[0].equals("doctorId") || !keySplit[1].equals(Integer.toString(doctorId))) { 
+				break;
+			}
+			delete(asString(key));
+			// whatever you want to do
+			iterator.next();
 		}
 	}
-
-	public int getDoctorId() {
-		return doctorId;
-	}
-
-	public int getExaminationId() {
-		return examinationId;
-	}
 	
-	public int getPatientId(){
-		return patientId;
-	}
-	
-	public int incrementAndGetDoctorId(){
-		doctorId++;
-		return  doctorId;
-	}
-	
-	public int incrementAndGetExaminationId(){
-		examinationId++;
-		return examinationId;
-	}
-	
-	public int incrementAndGetPatientId(){
-		patientId++;
-		return patientId;
-	}
-	
-	
+	//-----------------END OF DOCTOR METHODS
+		
+	//-----------------MAIN METHOD
 	
 	public static void main(String[] args) {
 		System.out.println("-----");
@@ -311,6 +433,11 @@ public class levelDBManager {
 		l.putPatient("pietro", "ducange", "male", "pisa", "1 jan 1970", "aa.bb@das.c", "duc1", "pepeaa");
 		
 		Patient p = l.readPatient("duc1");
+		System.out.println("-----");
+		System.out.print(p);
+		System.out.println("\tpwd: "+p.getPwdHash());
+		l.updatePatientInfo("duc1", "milano", "changed@gmail.com", "newhash");
+		p = l.readPatient("duc1");
 		System.out.println("-----");
 		System.out.print(p);
 		System.out.println("\tpwd: "+p.getPwdHash());
@@ -347,13 +474,13 @@ public class levelDBManager {
 		
 		
 		System.out.println(Hash.getSHA256("pepeaa"));
-		String h = l.loginPatient("duc1", "pepeaa");
+		String h = l.loginPatient("duc1", "newhash");
 		System.out.println("duc1\t->"+h);
 		
-		
-		
-		
-		
+		System.out.println("-----");		
+		l.readDoctorExamination(1);
+				
+		l.dumpLevelDB();
 		l.close();
 		System.out.println("Finished");
 	}

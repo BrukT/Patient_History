@@ -233,7 +233,7 @@ public class PatientWindow extends javax.swing.JFrame {
         int rowIndex = jTable1.getSelectedRow();
         String visitID = jTable1.getValueAt(rowIndex, 0).toString();
         Patient p = manager.readPatient(TFPatient.getText());
-        manager.deleteVisit(visitID, p.getPatientId());
+        manager.deleteExamination(visitID);
         
         List<Examination> list = manager.readPatientExaminations(TFPatient.getText());
         DefaultTableModel d = (DefaultTableModel) jTable1.getModel();

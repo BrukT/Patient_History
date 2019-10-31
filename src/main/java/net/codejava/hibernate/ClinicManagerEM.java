@@ -193,22 +193,18 @@ public class ClinicManagerEM {
 
 	}
 
-	public void deleteVisit(String visitId, int patientId) {
+	public void deleteExamination(String examinationId) {
 		//due to CASCADE property, when you delete a patient you also delete all the 
 		//examination he had
 		try {
 			entityManager = factory.createEntityManager();
 			entityManager.getTransaction().begin();
 			
-			Query query = entityManager.createQuery("SELECT e FROM Examination e WHERE e.examinationId = '" + visitId + "'");
+			Query query = entityManager.createQuery("SELECT e FROM Examination e WHERE e.examinationId = '" + examinationId + "'");
 			List<Examination> examList = query.getResultList();
 			if (examList.size() == 1) {
 				Examination e = examList.get(0);
-                                if (e.getPatient().getPatientId() == patientId) {
-                                    entityManager.remove(e);			
-                                } else {
-                                    throw new EntityNotFoundException();
-                                }
+				entityManager.remove(e);		
 			} else {
 				throw new EntityNotFoundException();
 			}
