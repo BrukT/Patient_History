@@ -124,9 +124,7 @@ public class ClinicManagerEM {
 		Patient p = readPatient(taxCode);
 		if(p == null)	//no patient found
 			return null;
-		System.out.println("proposed hash: " +pwdHash);
 		String patientPwdHash = p.getPwdHash();
-		System.out.println("patient: "+patientPwdHash);
 		if(pwdHash.equals(patientPwdHash)){
 			return taxCode;
 		}
