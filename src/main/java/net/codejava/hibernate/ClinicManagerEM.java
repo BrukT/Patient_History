@@ -279,6 +279,27 @@ public class ClinicManagerEM {
 		}
 	}
 	
+	public Doctor readDoctor(int doctorId){                
+		Doctor d = null;
+		try{
+			entityManager = factory.createEntityManager();
+			entityManager.getTransaction().begin();
+
+			d = entityManager.find(Doctor.class, doctorId);
+			if(d == null){
+				throw new EntityNotFoundException();
+			}
+		} catch (EntityNotFoundException e) {
+			System.out.println("readDoctor -  doctorId not found");
+		} catch (Exception e) {
+			System.out.println("Exception in doctorId");
+		} finally{
+			entityManager.getTransaction().commit();
+			entityManager.close();
+			return d;
+		}
+	}
+	
 	public String loginDoctor(int doctorId, String pwd){
 		String pwdHash = Hash.getSHA256(pwd);
 		Doctor d = readDoctor(doctorId);
@@ -357,27 +378,6 @@ public class ClinicManagerEM {
 		}
 	}
 	
-	public Doctor readDoctor(int doctorId){                
-		Doctor d = null;
-		try{
-			entityManager = factory.createEntityManager();
-			entityManager.getTransaction().begin();
-
-			d = entityManager.find(Doctor.class, doctorId);
-			if(d == null){
-				throw new EntityNotFoundException();
-			}
-		} catch (EntityNotFoundException e) {
-			System.out.println("readDoctor -  doctorId not found");
-		} catch (Exception e) {
-			System.out.println("Exception in doctorId");
-		} finally{
-			entityManager.getTransaction().commit();
-			entityManager.close();
-			return d;
-		}
-	}
-
 	public List<Examination> readDoctorExaminations(int doctorId){
                 Doctor d = null;
 		try{

@@ -162,6 +162,16 @@ public class levelDBManager {
 		put(key+"password", Hash.getSHA256(password));		//pwd hash 
 	}
 	
+	public void updatePatientInfo(String taxCode, String city, String email, String pwd) {
+		String key = "patientId:" + taxCode + ":";
+		if(city != null)
+			put(key+"city", city);
+		if(email != null)
+			put(key+"email", email);
+		if(pwd != null)
+			put(key+"password", Hash.getSHA256(pwd));
+	}
+	
 	public Patient readPatient(String taxCode){
 		String myKey = "patientId:" + taxCode + ":";
 		DBIterator iterator = levelDBStore.iterator();
@@ -195,16 +205,6 @@ public class levelDBManager {
 			return taxCode;
 		else
 			return null;
-	}
-	
-	public void updatePatientInfo(String taxCode, String city, String email, String pwd) {
-		String key = "patientId:" + taxCode + ":";
-		if(city != null)
-			put(key+"city", city);
-		if(email != null)
-			put(key+"email", email);
-		if(pwd != null)
-			put(key+"password", Hash.getSHA256(pwd));
 	}
 	
 	public List<Examination> readPatientExamination(String taxCode){
@@ -289,6 +289,14 @@ public class levelDBManager {
 		put(key+"password", Hash.getSHA256(password));
 	}
 	
+	public void updateDoctorInfo(int doctorId, String email, String pwd) {
+		String key = "doctorId:" + doctorId + ":";		
+		if(email != null)
+			put(key+"email", email);
+		if(pwd != null)
+			put(key+"password", Hash.getSHA256(pwd));
+	}
+	
 	public Doctor readDoctor(int doctorId){
 		String myKey = "doctorId:" + doctorId + ":";
 		DBIterator iterator = levelDBStore.iterator();
@@ -325,13 +333,33 @@ public class levelDBManager {
 		else
 			return null;
 	}
+		
+	public void putExamination(String taxCode, int doctorId, String type, String result, String examDate){
+		String key = "examinationId:" + incrementAndGetExaminationId() + ":" + taxCode + ":" + doctorId + ":";
+		
+		put(key+"examDate", examDate);
+		put(key+"type", type);
+		put(key+"result", result);
+	}	
 	
-	public void updateDoctorInfo(int doctorId, String email, String pwd) {
-		String key = "doctorId:" + doctorId + ":";		
-		if(email != null)
-			put(key+"email", email);
-		if(pwd != null)
-			put(key+"password", Hash.getSHA256(pwd));
+	public void updateExamination(int examinationId, String result){
+		String myKey = "examinationId:" + examinationId + ":";
+		DBIterator iterator = levelDBStore.iterator();
+		iterator.seek(bytes(myKey)); // starts from the specified key		
+		while (iterator.hasNext()){
+			byte[] key = iterator.peekNext().getKey();
+			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
+			
+			String[] keySplit = asString(key).split(":"); // split the key
+			if (!keySplit[0].equals("examinationId") || !keySplit[1].equals(Integer.toString(examinationId))) { 
+				break;
+			}
+			else if(keySplit[4].equals("result")){
+				put(asString(key), result);
+			}
+			
+			iterator.next();
+		}
 	}
 	
 	public List<Examination> readDoctorExamination(int doctorId){
@@ -371,35 +399,6 @@ public class levelDBManager {
 		}
 		
 		return examinations;
-	}
-	
-	
-	public void putExamination(String taxCode, int doctorId, String type, String result, String examDate){
-		String key = "examinationId:" + incrementAndGetExaminationId() + ":" + taxCode + ":" + doctorId + ":";
-		
-		put(key+"examDate", examDate);
-		put(key+"type", type);
-		put(key+"result", result);
-	}	
-	
-	public void updateExamination(int examinationId, String result){
-		String myKey = "examinationId:" + examinationId + ":";
-		DBIterator iterator = levelDBStore.iterator();
-		iterator.seek(bytes(myKey)); // starts from the specified key		
-		while (iterator.hasNext()){
-			byte[] key = iterator.peekNext().getKey();
-			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
-			
-			String[] keySplit = asString(key).split(":"); // split the key
-			if (!keySplit[0].equals("examinationId") || !keySplit[1].equals(Integer.toString(examinationId))) { 
-				break;
-			}
-			else if(keySplit[4].equals("result")){
-				put(asString(key), result);
-			}
-			
-			iterator.next();
-		}
 	}
 	
 	public void deleteDoctor(int doctorId) {
