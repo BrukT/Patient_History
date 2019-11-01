@@ -15,10 +15,14 @@ public class InsertResult extends javax.swing.JFrame {
      * Creates new form InsertResult
      */
     private ClinicManagerEM manager;
+    private DoctorWindow docWind;
+    private int docid;
     
-    public InsertResult(ClinicManagerEM m) {
+    public InsertResult(ClinicManagerEM m, DoctorWindow dw, int d) {
         initComponents();
         manager = m;
+        docWind = dw;
+        docid = d;
     }
     
 
@@ -93,6 +97,7 @@ public class InsertResult extends javax.swing.JFrame {
     private void ButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSaveMouseClicked
         // TODO add your handling code here:
        manager.updateExamination(Integer.parseInt(TFVisit.getText()), CBResult.getSelectedItem().toString());
+       docWind.updateTable(Integer.toString(docid));
        setVisible(false);
     }//GEN-LAST:event_ButtonSaveMouseClicked
 

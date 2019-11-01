@@ -1,5 +1,8 @@
 package net.codejava.hibernate;
 
+import java.awt.Frame;
+import java.awt.Window;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -20,13 +23,15 @@ public class InsertVisit extends javax.swing.JFrame {
     private String docID;
     private String patient;
     private String date;
+    private DoctorWindow docWind;
     
-    public InsertVisit(ClinicManagerEM m, String d, String p, String dt) {
+    public InsertVisit(ClinicManagerEM m, String d, String p, String dt, DoctorWindow dw) {
         initComponents();
         manager = m;
         docID = d;
         patient = p;
         date = dt;
+        docWind = dw;   
     }
 
     /**
@@ -92,26 +97,25 @@ public class InsertVisit extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(158, 158, 158)
+                .addComponent(SubmitButton)
+                .addContainerGap(159, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(102, 102, 102)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(TFPatient)
-                            .addComponent(TFDocID)
-                            .addComponent(TFDate)
-                            .addComponent(TFType)
-                            .addComponent(CBResult, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(158, 158, 158)
-                        .addComponent(SubmitButton)))
-                .addContainerGap(38, Short.MAX_VALUE))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(TFPatient)
+                    .addComponent(TFDocID)
+                    .addComponent(TFDate)
+                    .addComponent(TFType)
+                    .addComponent(CBResult, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(53, 53, 53))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,6 +157,7 @@ public class InsertVisit extends javax.swing.JFrame {
         // TODO add your handling code here:
         int id = manager.readPatient(patient).getPatientId();
         manager.createExamination(id, Integer.parseInt(docID), TFType.getText(), CBResult.getSelectedItem().toString(), date);
+        docWind.updateTable(TFDocID.getText());
         setVisible(false);
     }//GEN-LAST:event_SubmitButtonMouseClicked
 

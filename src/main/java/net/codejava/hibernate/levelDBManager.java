@@ -408,6 +408,7 @@ public class levelDBManager {
 	
 	//-----------------END OF DOCTOR METHODS
 		
+        /*
 	//-----------------MAIN METHOD
 	
 	public static void main(String[] args) {
@@ -463,4 +464,5 @@ public class levelDBManager {
 		l.close();
 		System.out.println("Finished");
 	}
+        */
 }

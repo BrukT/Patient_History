@@ -48,6 +48,8 @@ public class PatientSignUp extends javax.swing.JFrame {
         TFMail = new javax.swing.JTextField();
         ButtonSave = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        PFPass = new javax.swing.JPasswordField();
 
         setTitle("Sign Up");
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -94,39 +96,55 @@ public class PatientSignUp extends javax.swing.JFrame {
 
         jLabel8.setText("City");
 
+        jLabel6.setText("Password");
+
+        PFPass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PFPassActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel8))
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TFCity, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(TFSex, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(TFBirth, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(TFTaxcode, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(TFSurname, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(TFName, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(TFMail))
-                .addGap(35, 35, 35))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(172, Short.MAX_VALUE)
                 .addComponent(ButtonSave)
                 .addGap(145, 145, 145))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel6))
+                        .addGap(40, 40, 40)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TFTaxcode, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(TFSurname, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(TFName, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(PFPass)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel8))
+                        .addGap(39, 39, 39)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TFSex)
+                            .addComponent(TFCity)
+                            .addComponent(TFMail)
+                            .addComponent(TFBirth))))
+                .addGap(35, 35, 35))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(TFName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -138,6 +156,10 @@ public class PatientSignUp extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(TFTaxcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(PFPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -154,9 +176,9 @@ public class PatientSignUp extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TFMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(ButtonSave)
-                .addContainerGap())
+                .addGap(30, 30, 30))
         );
 
         pack();
@@ -177,10 +199,37 @@ public class PatientSignUp extends javax.swing.JFrame {
 
     private void ButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSaveMouseClicked
         // TODO add your handling code here:
+        String name, surname, sex, city, birth, mail, taxcode, pass;
+        name = TFName.getText();
+        surname = TFSurname.getText();
+        sex = TFSex.getText();
+        city = TFCity.getText();
+        birth = TFBirth.getText();
+        mail = TFMail.getText();
+        taxcode = TFTaxcode.getText();
+        pass = PFPass.getText();
+        
+        if(name.equals(""))
+            name = null;
+        if(surname.equals(""))
+            surname = null;
+        if(sex.equals(""))
+            sex = null;
+        if(city.equals(""))
+            city = null;
+        if(birth.equals(""))
+            birth = null;
+        if(mail.equals(""))
+            mail = null;
+        if(taxcode.equals(""))
+            taxcode = null;
+        if(pass.equals(""))
+            pass = null;
+        
         if(TFName.isEnabled()) 
-            manager.createPatient(TFName.getText(), TFSurname.getText(), TFSex.getText(), TFCity.getText(), TFBirth.getText(), TFMail.getText(), TFTaxcode.getText(), null);
+            manager.createPatient(name, surname, sex, city, birth, mail, taxcode, pass);
         else 
-            manager.updatePatientInfo(taxCode, TFCity.getText(), TFMail.getText(), null);
+            manager.updatePatientInfo(taxcode, city, mail, pass);
        
         setVisible(false);
     }//GEN-LAST:event_ButtonSaveMouseClicked
@@ -199,6 +248,10 @@ public class PatientSignUp extends javax.swing.JFrame {
         } 
     }//GEN-LAST:event_formWindowOpened
 
+    private void PFPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PFPassActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PFPassActionPerformed
+
     void disable_textFields() {
         TFName.setEnabled(false);
         TFSurname.setEnabled(false);
@@ -213,6 +266,7 @@ public class PatientSignUp extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonSave;
+    private javax.swing.JPasswordField PFPass;
     private javax.swing.JTextField TFBirth;
     private javax.swing.JTextField TFCity;
     private javax.swing.JTextField TFMail;
@@ -225,6 +279,7 @@ public class PatientSignUp extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     // End of variables declaration//GEN-END:variables

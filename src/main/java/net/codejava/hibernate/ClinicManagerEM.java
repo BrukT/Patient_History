@@ -121,17 +121,20 @@ public class ClinicManagerEM {
 		}
 	}
 	
-	public String loginPatient(String taxCode, String pwd){
+	public boolean loginPatient(String taxCode, String pwd){
 		String pwdHash = Hash.getSHA256(pwd);
 		Patient p = readPatient(taxCode);
-		if(p == null)	//no patient found
-			return null;
+		if(p == null) {	//no patient found
+                    System.out.println("Wrong taxcode");
+                    return false;
+                }
 		String patientPwdHash = p.getPwdHash();
 		if(pwdHash.equals(patientPwdHash)){
-			return taxCode;
+                    return true;
 		}
 		else{
-			return null;	//pwd not matching
+                    System.out.println("Wrong password");
+                    return false;	//pwd not matching
 		}
 	}
 	
@@ -300,17 +303,20 @@ public class ClinicManagerEM {
 		}
 	}
 	
-	public String loginDoctor(int doctorId, String pwd){
+	public boolean loginDoctor(int doctorId, String pwd){
 		String pwdHash = Hash.getSHA256(pwd);
 		Doctor d = readDoctor(doctorId);
-		if(d == null)	//no doctor found
-			return null;
+		if(d == null) {	//no doctor found
+                    System.out.println("Wrong ID");
+                    return false;
+                }
 		String doctorPwdHash = d.getPwdHash();
-		if(pwdHash.equals(doctorPwdHash)){
-			return Integer.toString(doctorId);
+		if(pwdHash.equals(doctorPwdHash)){	
+                    return true;
 		}
 		else{
-			return null;	//pwd not matching
+                    System.out.println("Wrong password");
+                    return false;	//pwd not matching
 		}
 	}
 
@@ -464,4 +470,5 @@ public class ClinicManagerEM {
 		System.out.println("Finished");
 
 	}
+        
 }
