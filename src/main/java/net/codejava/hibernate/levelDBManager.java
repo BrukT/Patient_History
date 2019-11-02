@@ -27,7 +27,7 @@ public class levelDBManager {
 	
 	//-----------------UTILITY METHODS
 		
-	public void init(String storeName){	//i.e. "levelDBStore"
+	public void init(String storeName){	//i.e. "mystore"
 		try {
 			Options options = new Options();
 			levelDBStore = factory.open(new File(storeName), options);
@@ -37,9 +37,8 @@ public class levelDBManager {
 			examinationId = 0;
 			while (iterator.hasNext()){
 				byte[] key = iterator.peekNext().getKey();
-				// key arrangement : doctorId:$doctor_id:$attribute_name = $value
 				String[] keySplit = asString(key).split(":"); // split the key
-				if (!keySplit[0].equals("examinationId")) { // breaking condition : prefix is not "employee"
+				if (!keySplit[0].equals("examinationId")) { 
 					break;
 				}
 				else{
@@ -52,9 +51,8 @@ public class levelDBManager {
 			doctorId = 0;
 			while (iterator.hasNext()){
 				byte[] key = iterator.peekNext().getKey();
-				// key arrangement : doctorId:$doctor_id:$attribute_name = $value
 				String[] keySplit = asString(key).split(":"); // split the key
-				if (!keySplit[0].equals("doctorId")) { // breaking condition : prefix is not "employee"
+				if (!keySplit[0].equals("doctorId")) {
 					break;
 				}
 				else{
@@ -66,9 +64,8 @@ public class levelDBManager {
 			patientId = 0;
 			while (iterator.hasNext()){
 				byte[] key = iterator.peekNext().getKey();
-				// key arrangement : doctorId:$doctor_id:$attribute_name = $value
 				String[] keySplit = asString(key).split(":"); // split the key
-				if (!keySplit[0].equals("patientiId")) { // breaking condition : prefix is not "employee"
+				if (!keySplit[0].equals("patientiId")) { 
 					break;
 				}
 				else{
@@ -103,7 +100,6 @@ public class levelDBManager {
 			byte[] key = iterator.peekNext().getKey();
 			byte[] value = iterator.peekNext().getValue();
 			System.out.println(asString(key) + "\t" + asString(value));
-			// whatever you want to do
 			iterator.next();
 		}
 		System.out.println("----------- END DUMP ---------");
@@ -175,15 +171,13 @@ public class levelDBManager {
 		int i = 0;
 		while (iterator.hasNext()){
 			byte[] key = iterator.peekNext().getKey();
-			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
+			// key arrangement : patientId:$patient_id:$attribute_name = $value
 			String[] keySplit = asString(key).split(":"); // split the key
-			if (!keySplit[0].equals("patientId") || !keySplit[1].equals(taxCode)) { // breaking condition : prefix is not "employee"
+			if (!keySplit[0].equals("patientId") || !keySplit[1].equals(taxCode)) { // breaking condition : prefix is not "patientId:$patientId"
 				break;
 			}
 			byte[] value = iterator.peekNext().getValue();
 			param.add(asString(value));
-			//System.out.println(asString(key) + " | "+asString(value));
-			// whatever you want to do
 			iterator.next();
 			i++;
 		}
@@ -224,15 +218,12 @@ public class levelDBManager {
 					Examination e = new Examination(Integer.parseInt(keySplit[1]), p, d, param.get(0), param.get(2), param.get(1));
 					examinations.add(e);
                                         param.clear();
-					//System.out.println("//");
 					i=0;
 				}
 			}
 			else{
 				i = 0;
 			}
-			
-			// whatever you want to do
 			iterator.next();
 			
 		}
@@ -248,11 +239,10 @@ public class levelDBManager {
 			byte[] key = iterator.peekNext().getKey();
 			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
 			String[] keySplit = asString(key).split(":"); // split the key
-			if (!keySplit[0].equals("patientId") || !keySplit[1].equals(taxCode)) { // breaking condition : prefix is not "employee"
+			if (!keySplit[0].equals("patientId") || !keySplit[1].equals(taxCode)) { // breaking condition : prefix is not "patientId:$patientId"
 				break;
 			}
 			delete(asString(key));
-			// whatever you want to do
 			iterator.next();
 		}
 	}
@@ -264,7 +254,7 @@ public class levelDBManager {
 		while (iterator.hasNext()){
 			byte[] key = iterator.peekNext().getKey();			
 			String[] keySplit = asString(key).split(":"); // split the key
-			if (!keySplit[0].equals("examinationId") || !keySplit[1].equals(examinationId)) { // breaking condition : prefix is not "employee"
+			if (!keySplit[0].equals("examinationId") || !keySplit[1].equals(examinationId)) { // breaking condition : prefix is not "examinationId:$examinationId"
 				break;
 			}
 			delete(asString(key));			
@@ -304,14 +294,13 @@ public class levelDBManager {
 			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
 			
 			String[] keySplit = asString(key).split(":"); // split the key
-			if (!keySplit[0].equals("doctorId") || !keySplit[1].equals(Integer.toString(doctorId))) { // breaking condition : prefix is not "employee"
+			if (!keySplit[0].equals("doctorId") || !keySplit[1].equals(Integer.toString(doctorId))) { // breaking condition : prefix is not "doctorId:$doctorId"
 				break;
 			}
 			
 			byte[] value = iterator.peekNext().getValue();
 			param.add(asString(value));
 			//System.out.println(asString(key) + " | "+asString(value));
-			// whatever you want to do
 			iterator.next();
 			i++;
 		}
@@ -328,8 +317,9 @@ public class levelDBManager {
 			return Integer.toString(doctorId);
 		else
 			return null;
+                
 	}
-		
+        
 	public void putExamination(String taxCode, int doctorId, String type, String result, String examDate){
 		String key = "examinationId:" + incrementAndGetExaminationId() + ":" + taxCode + ":" + doctorId + ":";
 		
@@ -427,13 +417,13 @@ public class levelDBManager {
 		l.init("mystore");
 		System.out.println("Current= doc:"+l.getDoctorId()+"\tex:"+l.getExaminationId()+"\tpat:"+l.getPatientId());
 		
-		l.putPatient("pietro", "ducange", "aa.bb@das.c", "duc1");
+		l.putPatient("nedo", "pisani", "aa.bb@das.c", "ned1");
 		l.dumpLevelDB();
-		Patient p = l.readPatient("duc1");
+		Patient p = l.readPatient("ned1");
 		System.out.println("-----");
 		System.out.println(p);
-		l.updatePatientInfo("duc1", "changed@gmail.com");
-		p = l.readPatient("duc1");
+		l.updatePatientInfo("ned1", "changed@gmail.com");
+		p = l.readPatient("ned1");
 		System.out.println("-----");
 		System.out.println(p);
 		
@@ -442,11 +432,11 @@ public class levelDBManager {
 		Doctor d = l.readDoctor(1);		
 		System.out.println(d);
 		System.out.println("-----");
-		l.putExamination("duc1", 1, "blood", "not available", "yesterday");
-		l.putExamination("duc1", 1, "head", "positive", "20 oct");
+		l.putExamination("ned1", 1, "blood", "not available", "yesterday");
+		l.putExamination("ned1", 1, "head", "positive", "20 oct");
 		System.out.println("\n\n\n-----");
 		System.out.println("-----");
-		List<Examination> list = l.readPatientExamination("duc1");
+		List<Examination> list = l.readPatientExamination("ned1");
 		System.out.println("-----");
 		System.out.println("-----");
 		list.forEach((x) -> {
