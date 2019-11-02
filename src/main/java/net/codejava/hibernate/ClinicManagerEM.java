@@ -50,13 +50,14 @@ public class ClinicManagerEM {
 			} else {
 				throw new EntityExistsException();
 			}
-
+			entityManager.getTransaction().commit();
 		} catch (EntityExistsException e) {
 			System.out.println("createPatient - Duplicated taxCode (must be unique)");
+                        entityManager.getTransaction().rollback();                        
 		} catch (Exception e) {
 			System.out.println("Exception in createPatient");
+                        entityManager.getTransaction().rollback();
 		} finally {			
-			entityManager.getTransaction().commit();
 			entityManager.close();
 		}
 	}
@@ -84,13 +85,15 @@ public class ClinicManagerEM {
 				entityManager.merge(p);					//merge it				
 			} else {
 				throw new EntityNotFoundException();
-			}
+			}                        
+			entityManager.getTransaction().commit();		//commit
 		} catch (EntityNotFoundException e) {
 			System.out.println("updatePatientInfo - taxCode not found");
+                        entityManager.getTransaction().rollback();
 		} catch (Exception e) {
 			System.out.println("Exception in updatePatientInfo");
+                        entityManager.getTransaction().rollback();
 		} finally {
-			entityManager.getTransaction().commit();		//commit
 			entityManager.close();
 		}
 	}
@@ -186,14 +189,14 @@ public class ClinicManagerEM {
 			} else {
 				throw new EntityNotFoundException();
 			}
+			entityManager.getTransaction().commit();
 		} catch(EntityNotFoundException e){
 			System.out.println("deletePatient -  not found");
+                        entityManager.getTransaction().rollback();
 		}catch (Exception ex) {
-			ex.printStackTrace();
 			System.out.println("Exception in deletePatient");
-
+                        entityManager.getTransaction().rollback();
 		} finally {
-			entityManager.getTransaction().commit();
 			entityManager.close();
 		}
 
@@ -214,14 +217,14 @@ public class ClinicManagerEM {
 			} else {
 				throw new EntityNotFoundException();
 			}
+			entityManager.getTransaction().commit();
 		} catch(EntityNotFoundException e){
 			System.out.println("deleteExam -  not found");
+                        entityManager.getTransaction().rollback();
 		}catch (Exception ex) {
-			ex.printStackTrace();
 			System.out.println("Exception in deleteExam");
-
+			entityManager.getTransaction().rollback();
 		} finally {
-			entityManager.getTransaction().commit();
 			entityManager.close();
 		}
 
@@ -247,12 +250,14 @@ public class ClinicManagerEM {
 			} else {
 				throw new EntityExistsException();
 			}
+			entityManager.getTransaction().commit();
 		} catch (EntityExistsException e) {
 			System.out.println("createDoctor - Entity already exists");
+                        entityManager.getTransaction().rollback();
 		} catch (Exception e) {
 			System.out.println("Exception in createDoctor");
+                        entityManager.getTransaction().rollback();
 		} finally {
-			entityManager.getTransaction().commit();
 			entityManager.close();
 		}
 	}
@@ -275,12 +280,14 @@ public class ClinicManagerEM {
 			} else {
 				throw new EntityNotFoundException();
 			}
+			entityManager.getTransaction().commit();		//commit
 		} catch (EntityNotFoundException e) {
 			System.out.println("updateDoctorInfo - doctorId not found");
+                        entityManager.getTransaction().rollback();
 		} catch (Exception e) {
 			System.out.println("Exception in updateDoctorInfo");
+                        entityManager.getTransaction().rollback();
 		} finally {
-			entityManager.getTransaction().commit();		//commit
 			entityManager.close();
 		}
 	}
@@ -352,13 +359,14 @@ public class ClinicManagerEM {
 			}
 			examination.setDoctor(doctor);
 			entityManager.persist(examination);
-
+			entityManager.getTransaction().commit();	//commit                        
 		} catch (EntityExistsException e) {
 			System.out.println("createExamination - Entity already exists");
+                        entityManager.getTransaction().rollback();
 		} catch (Exception e) {
 			System.out.println("Exception in createExamination");
+                        entityManager.getTransaction().rollback();
 		} finally {
-			entityManager.getTransaction().commit();	//commit
 			entityManager.close();
 		}
 	}
@@ -376,13 +384,14 @@ public class ClinicManagerEM {
 			else{
 				throw new EntityNotFoundException();
 			}
+			entityManager.getTransaction().commit();
 		} catch (EntityNotFoundException e) {
 			System.out.println("updateExamination - not found");
-
+                        entityManager.getTransaction().rollback();
 		} catch(Exception e){
 			System.out.println("Exception in updateExamination");
+                        entityManager.getTransaction().rollback();
 		}finally {
-			entityManager.getTransaction().commit();
 			entityManager.close();//the entity manager must be always closed
 		}
 	}
@@ -433,14 +442,15 @@ public class ClinicManagerEM {
 			else {
 				throw new EntityNotFoundException();
 			}
+			entityManager.getTransaction().commit();
 		} catch(EntityNotFoundException e){
 			System.out.println("deleteDoctor -  not found");
+                        entityManager.getTransaction().rollback();
 		}catch (Exception ex) {
-			ex.printStackTrace();
 			System.out.println("Exception in deleteDoctor");
+                        entityManager.getTransaction().rollback();
 
 		} finally {
-			entityManager.getTransaction().commit();
 			entityManager.close();
 		}
 
@@ -462,8 +472,6 @@ public class ClinicManagerEM {
 		m.setVisible(true);
                 
 		//create patients
-		manager.createPatient("pietro", "ducange", "female", "pisa", "1980-01-23", "pietroducange@plasmon.it", "duc1", "pwd1");				
-		manager.createPatient("enzo", "mingozzi", "male", "pisa", "1964-09-10", "enzomingozzi@skynet.com", "ming1", "pwd2");
 		//create doctor
 		manager.createDoctor(1, "Jack", "The Reaper", "aaa@bb.cc", "doc1");
 		manager.createDoctor(2, "Lord", "Voldemort", "tom.riddle@student.hogwarts.uk", "doc2");
