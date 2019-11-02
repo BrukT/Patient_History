@@ -209,7 +209,7 @@ public class levelDBManager {
 			String[] keySplit = asString(key).split(":"); // split the key
 			if(keySplit[2].equals(taxCode)){
 				byte[] value = iterator.peekNext().getValue();
-				System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
+				//System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
 				param.add(asString(value));
 				i++;
 				if(i==3){
@@ -363,7 +363,7 @@ public class levelDBManager {
 				break;
 			if(keySplit[3].equals(Integer.toString(doctorId))){
 				byte[] value = iterator.peekNext().getValue();
-				System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
+				//System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
 				param.add(asString(value));
 				i++;
 				if(i==3){
