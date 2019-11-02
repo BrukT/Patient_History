@@ -149,10 +149,13 @@ public class levelDBManager {
 	
 	//-----------------PATIENT METHODS
 	
-	public void putPatient(String name, String surname, String email, String taxCode){
-            
+	public void putPatient(String name, String surname, String email, String taxCode){            
 		String key = "patientId:" + taxCode + ":";
 		
+                String s = get(key);
+                if(s!=null)
+                    return;
+                
 		put(key+"name", name);
 		put(key+"surname", surname);
 		put(key+"email", email);				
@@ -275,6 +278,9 @@ public class levelDBManager {
 	
 	public void putDoctor(String name, String surname, String email){
 		String key = "doctorId:" + incrementAndGetDoctorId() + ":";
+                String s = get(key);
+                if(s!=null)
+                    return;
 		
 		put(key+"name", name);
 		put(key+"surname", surname);

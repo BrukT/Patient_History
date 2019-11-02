@@ -29,8 +29,7 @@ public class Examination  {
     
     private String type;
     
-    @Column(nullable = true)
-    private String result;              //results might be unavailable
+    private String result;           
     
     public int getId() {
         return examinationId;
