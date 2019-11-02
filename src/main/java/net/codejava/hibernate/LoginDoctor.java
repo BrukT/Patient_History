@@ -95,10 +95,19 @@ public class LoginDoctor extends javax.swing.JFrame {
 
     private void ButtonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLoginMouseClicked
         // TODO add your handling code here:
-        if(jpaManager.loginDoctor(Integer.parseInt(TFId.getText()), PFPass.getText())) {
+        int id = -1;
+        if(!TFId.getText().equals(""))
+            id = Integer.parseInt(TFId.getText());
+        
+        String ps = PFPass.getText();
+        
+        if(jpaManager.loginDoctor(id, ps)) {
             setVisible(false);
             mainWind.setVisible(false);
             new DoctorWindow(jpaManager, ldbManager, TFId.getText()).setVisible(true);
+        }
+        else {
+            new ErrorWindow("ID and/or password are wrong").setVisible(true);
         }
     }//GEN-LAST:event_ButtonLoginMouseClicked
 

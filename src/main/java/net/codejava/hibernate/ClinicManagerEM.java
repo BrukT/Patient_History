@@ -125,6 +125,9 @@ public class ClinicManagerEM {
 	}
 	
 	public boolean loginPatient(String taxCode, String pwd){
+                if(taxCode == null || pwd == null)
+                    return false;
+                
 		String pwdHash = Hash.getSHA256(pwd);
 		Patient p = readPatient(taxCode);
 		if(p == null) {	//no patient found
@@ -314,6 +317,9 @@ public class ClinicManagerEM {
 	}
 	
 	public boolean loginDoctor(int doctorId, String pwd){
+                if(doctorId == -1 || pwd == null)
+                    return false;
+                
 		String pwdHash = Hash.getSHA256(pwd);
 		Doctor d = readDoctor(doctorId);
 		if(d == null) {	//no doctor found

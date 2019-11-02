@@ -5,6 +5,8 @@
  */
 package net.codejava.hibernate;
 
+import java.util.List;
+
 /**
  *
  * @author nicom
@@ -99,8 +101,17 @@ public class InsertResult extends javax.swing.JFrame {
     private void ButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSaveMouseClicked
         // TODO add your handling code here:
       // jpaManager.updateExamination(Integer.parseInt(TFVisit.getText()), CBResult.getSelectedItem().toString()); //TO COMMENT
-        if(TFVisit.getText().equals("")) {
-            new ErrorWindow("Error: insert a visit ID.").setVisible(true);
+        boolean check = false;
+        List<Examination> list = ldbManager.readDoctorExamination(docid);
+        for(int i=0; i<list.size(); ++i) {
+            String id = Integer.toString(list.get(i).getId());
+            if(id.equals(TFVisit.getText())) {
+                check = true;
+                break;
+            }         
+        }
+        if(!check) {
+            new ErrorWindow("Error: insert a correct visit ID.").setVisible(true);
         }
         else {
             ldbManager.updateExamination(Integer.parseInt(TFVisit.getText()), CBResult.getSelectedItem().toString());
