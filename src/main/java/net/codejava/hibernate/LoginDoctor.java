@@ -15,10 +15,12 @@ public class LoginDoctor extends javax.swing.JFrame {
      * Creates new form LoginDoctor
      */
     private ClinicManagerEM manager;
+    private MainWindow mWindow;
     
-    public LoginDoctor(ClinicManagerEM m) {
+    public LoginDoctor(ClinicManagerEM m, MainWindow w) {
         initComponents();
         manager = m;
+        mWindow = w;
     }
 
     /**
@@ -121,8 +123,9 @@ public class LoginDoctor extends javax.swing.JFrame {
     private void ButtonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLoginMouseClicked
         // TODO add your handling code here:
         if(manager.loginDoctor(Integer.parseInt(TFId.getText()), PFPass.getText())) {
-            new DoctorWindow(manager, TFId.getText()).setVisible(true);
-            setVisible(false);
+            new DoctorWindow(manager, mWindow, TFId.getText()).setVisible(true);
+            //setVisible(false);
+            this.dispose();
         }
     }//GEN-LAST:event_ButtonLoginMouseClicked
 

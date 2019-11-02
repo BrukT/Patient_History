@@ -7,11 +7,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.swing.JOptionPane;
 
 public class ClinicManagerEM {
 
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
+        static MainWindow m;
+        static ClinicManagerEM manager;
 
 	//-----------------UTILITY METHODS
 	
@@ -125,7 +128,7 @@ public class ClinicManagerEM {
 		String pwdHash = Hash.getSHA256(pwd);
 		Patient p = readPatient(taxCode);
 		if(p == null) {	//no patient found
-                    System.out.println("Wrong taxcode");
+                    JOptionPane.showMessageDialog(null, "No patient with this taxCode! \nPlease try again.", "TaxCode Error", JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
 		String patientPwdHash = p.getPwdHash();
@@ -133,6 +136,7 @@ public class ClinicManagerEM {
                     return true;
 		}
 		else{
+                    JOptionPane.showMessageDialog(null,"wrong password! Please try again", "Wrong Credentials", JOptionPane.ERROR_MESSAGE);
                     System.out.println("Wrong password");
                     return false;	//pwd not matching
 		}
@@ -450,18 +454,25 @@ public class ClinicManagerEM {
                 
 		
 		// code to run the program
-		ClinicManagerEM manager = new ClinicManagerEM();
+		manager = new ClinicManagerEM();
 		manager.setup();
 
-		MainWindow m = new MainWindow(manager);
+		m = new MainWindow(manager);
 		m.setVisible(true);
                 
 		//create patients
-		manager.createPatient("pietro", "ducange", "female", "pisa", "1980-01-23", "pietroducange@plasmon.it", "duc1", "pwd1");				
-		manager.createPatient("enzo", "mingozzi", "male", "pisa", "1964-09-10", "enzomingozzi@skynet.com", "ming1", "pwd2");
+		manager.createPatient("luizi", "manos", "female", "pisa", "1980-01-23", "luizimanos@plasmon.it", "lui1", "pwd1");				
+		manager.createPatient("enzo", "straneri", "male", "pisa", "1964-09-10", "enzostrancari@skynet.com", "enz2", "pwd2");
 		//create doctor
 		manager.createDoctor(1, "Jack", "The Reaper", "aaa@bb.cc", "doc1");
 		manager.createDoctor(2, "Lord", "Voldemort", "tom.riddle@student.hogwarts.uk", "doc2");
+                
+                //create examination
+                manager.createExamination(1, 1, "Haemophilia", null, "2019-01-03");
+                manager.createExamination(1, 2, "Cystic fibriosis", null, "2019-01-03");
+                manager.createExamination(1, 1, "Color Blindness", null, "2019-01-03");
+                manager.createExamination(2, 1, "Haemophilia", null, "2019-01-03");
+                manager.createExamination(2, 2, "Cystic fibriosis", null, "2019-01-03");
 		
 		System.out.println("-----");
 		//manager.deletePatient("duc1");

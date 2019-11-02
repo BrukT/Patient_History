@@ -20,11 +20,13 @@ public class PatientWindow extends javax.swing.JFrame {
      */
     
     private ClinicManagerEM manager;
+    private MainWindow mWindow;
     private String taxcode;
     
-    public PatientWindow(ClinicManagerEM m, String t) {
+    public PatientWindow(ClinicManagerEM m, MainWindow w, String t) {
         initComponents();
         manager = m;
+        mWindow = w;
         taxcode = t;
     }
 
@@ -236,8 +238,9 @@ public class PatientWindow extends javax.swing.JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
-        new MainWindow(manager).setVisible(true);
-        this.setVisible(false);
+        mWindow.setVisible(true);
+        //this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened

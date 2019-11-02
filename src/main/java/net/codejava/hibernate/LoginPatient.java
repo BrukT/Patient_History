@@ -16,10 +16,12 @@ public class LoginPatient extends javax.swing.JFrame {
      * Creates new form LoginPatient
      */
     private ClinicManagerEM manager;
+    private MainWindow mWindow;
     
-    public LoginPatient(ClinicManagerEM m) {
+    public LoginPatient(ClinicManagerEM m, MainWindow w) {
         initComponents();
         manager = m;
+        mWindow = w;
     }
 
     /**
@@ -122,8 +124,11 @@ public class LoginPatient extends javax.swing.JFrame {
     private void ButtonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLoginMouseClicked
         // TODO add your handling code here:
         if(manager.loginPatient(TFTaxcode.getText(), PFPass.getText())) {
-            new PatientWindow(manager, TFTaxcode.getText()).setVisible(true);
-            setVisible(false);
+            new PatientWindow(manager, mWindow, TFTaxcode.getText()).setVisible(true);
+            
+            //this.setVisible(false);
+            this.dispose();
+            //mWindow.setVisible(false);
         }
     }//GEN-LAST:event_ButtonLoginMouseClicked
 
