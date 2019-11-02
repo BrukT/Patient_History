@@ -1,7 +1,5 @@
 package net.codejava.hibernate;
 
-import java.util.List;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -18,11 +16,13 @@ public class MainWindow extends javax.swing.JFrame {
      * Creates new form MainWindow
      */
     
-    private ClinicManagerEM manager;
+    private ClinicManagerEM jpaManager;
+    private levelDBManager ldbManager;
     
-    public MainWindow(ClinicManagerEM m) {
+    public MainWindow(ClinicManagerEM m, levelDBManager l) {
         initComponents();
-        manager = m;
+        jpaManager = m;
+        ldbManager = l;
     }
 
     /**
@@ -118,9 +118,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonSIgnup)
                     .addComponent(ButtonLoginDoc))
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
                 .addComponent(ButtonLoginPat)
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         pack();
@@ -129,7 +129,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
-        manager.exit();
+        jpaManager.exit();
+        ldbManager.close();
     }//GEN-LAST:event_formWindowClosed
 
     private void ButtonLoginDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLoginDocActionPerformed
@@ -137,15 +138,15 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_ButtonLoginDocActionPerformed
 
     private void ButtonSIgnupMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSIgnupMouseClicked
-        new PatientSignUp(manager).setVisible(true);
+        new PatientSignUp(jpaManager, ldbManager).setVisible(true);
     }//GEN-LAST:event_ButtonSIgnupMouseClicked
 
     private void ButtonLoginPatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLoginPatMouseClicked
-        new LoginPatient(manager, this).setVisible(true);
+        new LoginPatient(jpaManager, ldbManager, this).setVisible(true);
     }//GEN-LAST:event_ButtonLoginPatMouseClicked
 
     private void ButtonLoginDocMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLoginDocMouseClicked
-        new LoginDoctor(manager, this).setVisible(true);
+        new LoginDoctor(jpaManager, ldbManager, this).setVisible(true);
     }//GEN-LAST:event_ButtonLoginDocMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -158,52 +159,46 @@ public class MainWindow extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
 
+    //-----------------MAIN METHOD
+    public static void main(String[] args) {
 
 
-/*
-	//-----------------MAIN METHOD
-	public static void main(String[] args) {
-                
-		
-		// code to run the program
-                System.out.println("-----");
-                System.out.println("Start");
-                
-		ClinicManagerEM manager = new ClinicManagerEM();
-		manager.setup();
-                
-                System.out.println("-----");
-                
-                levelDBManager l = new levelDBManager();
-		l.init("mystore");
-                
-                System.out.println("Current= doc:"+l.getDoctorId()+"\tex:"+l.getExaminationId()+"\tpat:"+l.getPatientId());
+            // code to run the program
+            System.out.println("-----");
+            System.out.println("Start");
 
-		MainWindow m = new MainWindow(manager);
-		m.setVisible(true);
-                
-		//create patients
-		manager.createPatient("pietro", "ducange", "female", "pisa", "1980-01-23", "pietroducange@plasmon.it", "duc1", "pwd1");	
-                l.putPatient("pietro", "ducange", "pietroducange@plasmon.it", "duc1");
-                
-		manager.createPatient("enzo", "mingozzi", "male", "pisa", "1964-09-10", "enzomingozzi@skynet.com", "ming1", "pwd2");
-                l.putPatient("enzo", "mingozzi", "enzomingozzi@skynet.com", "ming1");
-                
-		//create doctor
-		manager.createDoctor(1, "Jack", "The Reaper", "aaa@bb.cc", "doc1");
-                l.putDoctor("Jack", "The Reaper", "aaa@bb.cc");
-		manager.createDoctor(2, "Lord", "Voldemort", "tom.riddle@student.hogwarts.uk", "doc2");
-                l.putDoctor("Lord", "Voldemort", "tom.riddle@student.hogwarts.uk");
-                
-                l.dumpLevelDB();
+            ClinicManagerEM jpaManager = new ClinicManagerEM();
+            jpaManager.setup();
 
-		
-		System.out.println("-----");
-                
-		System.out.println("Finished");
+            System.out.println("-----");
 
-	}*/
-        
+            levelDBManager ldbManager = new levelDBManager();
+            ldbManager.init("mystore");
+
+            System.out.println("Current= doc:"+ldbManager.getDoctorId()+"\tex:"+ldbManager.getExaminationId()+"\tpat:"+ldbManager.getPatientId());
+
+            //create patients
+            jpaManager.createPatient("pietro", "ducange", "female", "pisa", "1980-01-23", "pietroducange@plasmon.it", "duc1", "pwd1");	
+            ldbManager.putPatient("pietro", "ducange", "pietroducange@plasmon.it", "duc1");
+
+            jpaManager.createPatient("enzo", "mingozzi", "male", "pisa", "1964-09-10", "enzomingozzi@skynet.com", "ming1", "pwd2");
+            ldbManager.putPatient("enzo", "mingozzi", "enzomingozzi@skynet.com", "ming1");
+
+            //create doctor
+            jpaManager.createDoctor(1, "Jack", "The Reaper", "aaa@bb.cc", "doc1");
+            ldbManager.putDoctor("Jack", "The Reaper", "aaa@bb.cc");
+            jpaManager.createDoctor(2, "Lord", "Voldemort", "tom.riddle@student.hogwarts.uk", "doc2");
+            ldbManager.putDoctor("Lord", "Voldemort", "tom.riddle@student.hogwarts.uk");
+
+            ldbManager.dumpLevelDB();
+
+            System.out.println("-----");
+
+            System.out.println("Finished");
+
+            MainWindow m = new MainWindow(jpaManager, ldbManager);
+            m.setVisible(true);
+
+    }
+      
 }
-
-

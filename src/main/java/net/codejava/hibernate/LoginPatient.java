@@ -15,13 +15,15 @@ public class LoginPatient extends javax.swing.JFrame {
     /**
      * Creates new form LoginPatient
      */
-    private ClinicManagerEM manager;
-    private MainWindow mWindow;
+    private ClinicManagerEM jpaManager;
+    private levelDBManager ldbManager;
+    private MainWindow mainWind;
     
-    public LoginPatient(ClinicManagerEM m, MainWindow w) {
+    public LoginPatient(ClinicManagerEM m, levelDBManager l, MainWindow mw) {
         initComponents();
-        manager = m;
-        mWindow = w;
+        jpaManager = m;
+        ldbManager = l;
+        mainWind = mw;
     }
 
     /**
@@ -43,29 +45,12 @@ public class LoginPatient extends javax.swing.JFrame {
 
         jLabel1.setText("Tax code");
 
-        TFTaxcode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TFTaxcodeActionPerformed(evt);
-            }
-        });
-
         jLabel2.setText("Password");
 
         ButtonLogin.setText("Login");
         ButtonLogin.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ButtonLoginMouseClicked(evt);
-            }
-        });
-        ButtonLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonLoginActionPerformed(evt);
-            }
-        });
-
-        PFPass.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PFPassActionPerformed(evt);
             }
         });
 
@@ -109,26 +94,13 @@ public class LoginPatient extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLoginActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ButtonLoginActionPerformed
-
-    private void TFTaxcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TFTaxcodeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TFTaxcodeActionPerformed
-
-    private void PFPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PFPassActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PFPassActionPerformed
-
     private void ButtonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLoginMouseClicked
         // TODO add your handling code here:
-        if(manager.loginPatient(TFTaxcode.getText(), PFPass.getText())) {
-            new PatientWindow(manager, mWindow, TFTaxcode.getText()).setVisible(true);
+        if(jpaManager.loginPatient(TFTaxcode.getText(), PFPass.getText())) {
+            setVisible(false);
+            mainWind.setVisible(false);
+            new PatientWindow(jpaManager, ldbManager, TFTaxcode.getText()).setVisible(true);
             
-            //this.setVisible(false);
-            this.dispose();
-            //mWindow.setVisible(false);
         }
     }//GEN-LAST:event_ButtonLoginMouseClicked
 

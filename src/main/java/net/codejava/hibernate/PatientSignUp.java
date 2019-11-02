@@ -16,12 +16,22 @@ public class PatientSignUp extends javax.swing.JFrame {
      * Creates new form PatientSignIn
      */
     
-    private ClinicManagerEM manager;
+    private ClinicManagerEM jpaManager;
+    private levelDBManager ldbManager;
+    private PatientWindow patWind;
     private String taxCode;
     
-    public PatientSignUp(ClinicManagerEM m) {
+    public PatientSignUp(ClinicManagerEM m, levelDBManager l, PatientWindow p) {
         initComponents();
-        manager = m;
+        jpaManager = m;
+        ldbManager = l;
+        patWind = p;
+    }
+    
+    public PatientSignUp(ClinicManagerEM m, levelDBManager l) {
+        initComponents();
+        jpaManager = m;
+        ldbManager = l;
     }
 
     /**
@@ -70,39 +80,16 @@ public class PatientSignUp extends javax.swing.JFrame {
 
         jLabel7.setText("Email");
 
-        TFSurname.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TFSurnameActionPerformed(evt);
-            }
-        });
-
-        TFTaxcode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TFTaxcodeActionPerformed(evt);
-            }
-        });
-
         ButtonSave.setText("Save");
         ButtonSave.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ButtonSaveMouseClicked(evt);
             }
         });
-        ButtonSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonSaveActionPerformed(evt);
-            }
-        });
 
         jLabel8.setText("City");
 
         jLabel6.setText("Password");
-
-        PFPass.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PFPassActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -185,18 +172,6 @@ public class PatientSignUp extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TFSurnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TFSurnameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TFSurnameActionPerformed
-
-    private void TFTaxcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TFTaxcodeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TFTaxcodeActionPerformed
-
-    private void ButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonSaveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ButtonSaveActionPerformed
-
     private void ButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSaveMouseClicked
         // TODO add your handling code here:
         String name, surname, sex, city, birth, mail, taxcode, pass;
@@ -226,18 +201,35 @@ public class PatientSignUp extends javax.swing.JFrame {
         if(pass.equals(""))
             pass = null;
         
-        if(TFName.isEnabled()) 
-            manager.createPatient(name, surname, sex, city, birth, mail, taxcode, pass);
-        else 
-            manager.updatePatientInfo(taxcode, city, mail, pass);
-       
-        setVisible(false);
+        if(TFName.isEnabled()) {
+            if(name != null && surname != null && sex != null && city != null && birth != null && mail != null && taxcode != null && pass != null) {
+                jpaManager.createPatient(name, surname, sex, city, birth, mail, taxcode, pass);
+                ldbManager.putPatient(name, surname, mail, taxcode);
+
+                ldbManager.dumpLevelDB();
+                setVisible(false);
+            }
+            else {
+                new ErrorWindow("You must complete the entire form.").setVisible(true);
+            }
+        }
+        else {
+            jpaManager.updatePatientInfo(taxcode, city, mail, pass);
+            ldbManager.updatePatientInfo(taxcode, mail);
+            
+            patWind.updateTable(taxcode);
+            
+            ldbManager.dumpLevelDB();
+            setVisible(false);
+        }
+        
+        
     }//GEN-LAST:event_ButtonSaveMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         if(!TFName.isEnabled()) {
-            Patient p = manager.readPatient(taxCode);
+            Patient p = jpaManager.readPatient(taxCode);
             TFName.setText(p.getName());
             TFSurname.setText(p.getSurname());
             TFTaxcode.setText(taxCode);
@@ -247,10 +239,6 @@ public class PatientSignUp extends javax.swing.JFrame {
             TFMail.setText(p.getEmail());
         } 
     }//GEN-LAST:event_formWindowOpened
-
-    private void PFPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PFPassActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PFPassActionPerformed
 
     void disable_textFields() {
         TFName.setEnabled(false);

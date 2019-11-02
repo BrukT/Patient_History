@@ -153,14 +153,8 @@
     <Component class="javax.swing.JTextField" name="TFName">
     </Component>
     <Component class="javax.swing.JTextField" name="TFSurname">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TFSurnameActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="TFTaxcode">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TFTaxcodeActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="TFBirth">
     </Component>
@@ -176,7 +170,6 @@
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ButtonSaveMouseClicked"/>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonSaveActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
@@ -190,9 +183,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JPasswordField" name="PFPass">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PFPassActionPerformed"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

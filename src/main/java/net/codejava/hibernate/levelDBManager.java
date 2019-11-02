@@ -149,7 +149,8 @@ public class levelDBManager {
 	
 	//-----------------PATIENT METHODS
 	
-	public void putPatient(String name, String surname, String email, String taxCode){		
+	public void putPatient(String name, String surname, String email, String taxCode){
+            
 		String key = "patientId:" + taxCode + ":";
 		
 		put(key+"name", name);
@@ -211,7 +212,7 @@ public class levelDBManager {
 			String[] keySplit = asString(key).split(":"); // split the key
 			if(keySplit[2].equals(taxCode)){
 				byte[] value = iterator.peekNext().getValue();
-				//System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
+				System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
 				param.add(asString(value));
 				i++;
 				if(i==3){
@@ -219,6 +220,7 @@ public class levelDBManager {
 					Doctor d = readDoctor(Integer.parseInt(keySplit[3]));
 					Examination e = new Examination(Integer.parseInt(keySplit[1]), p, d, param.get(0), param.get(2), param.get(1));
 					examinations.add(e);
+                                        param.clear();
 					//System.out.println("//");
 					i=0;
 				}
@@ -365,7 +367,7 @@ public class levelDBManager {
 				break;
 			if(keySplit[3].equals(Integer.toString(doctorId))){
 				byte[] value = iterator.peekNext().getValue();
-				//System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
+				System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
 				param.add(asString(value));
 				i++;
 				if(i==3){
@@ -373,6 +375,7 @@ public class levelDBManager {
 					Doctor d = readDoctor(Integer.parseInt(keySplit[3]));
 					Examination e = new Examination(Integer.parseInt(keySplit[1]), p, d, param.get(0), param.get(2), param.get(1));
 					examinations.add(e);
+                                        param.clear();
 					//System.out.println("//");
 					i=0;
 				}

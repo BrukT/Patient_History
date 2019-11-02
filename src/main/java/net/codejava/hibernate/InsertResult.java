@@ -14,13 +14,15 @@ public class InsertResult extends javax.swing.JFrame {
     /**
      * Creates new form InsertResult
      */
-    private ClinicManagerEM manager;
+    private ClinicManagerEM jpaManager;
+    private levelDBManager ldbManager;
     private DoctorWindow docWind;
     private int docid;
     
-    public InsertResult(ClinicManagerEM m, DoctorWindow dw, int d) {
+    public InsertResult(ClinicManagerEM m, levelDBManager l, DoctorWindow dw, int d) {
         initComponents();
-        manager = m;
+        jpaManager = m;
+        ldbManager = l;
         docWind = dw;
         docid = d;
     }
@@ -96,9 +98,16 @@ public class InsertResult extends javax.swing.JFrame {
 
     private void ButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSaveMouseClicked
         // TODO add your handling code here:
-       manager.updateExamination(Integer.parseInt(TFVisit.getText()), CBResult.getSelectedItem().toString());
-       docWind.updateTable(Integer.toString(docid));
-       setVisible(false);
+      // jpaManager.updateExamination(Integer.parseInt(TFVisit.getText()), CBResult.getSelectedItem().toString()); //TO COMMENT
+        if(TFVisit.getText().equals("")) {
+            new ErrorWindow("Error: insert a visit ID.").setVisible(true);
+        }
+        else {
+            ldbManager.updateExamination(Integer.parseInt(TFVisit.getText()), CBResult.getSelectedItem().toString());
+            docWind.updateTable(Integer.toString(docid));
+            setVisible(false);
+            ldbManager.dumpLevelDB();
+        }
     }//GEN-LAST:event_ButtonSaveMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -19,14 +19,14 @@ public class PatientWindow extends javax.swing.JFrame {
      * Creates new form PatientWindow
      */
     
-    private ClinicManagerEM manager;
-    private MainWindow mWindow;
+    private ClinicManagerEM jpaManager;
+    private levelDBManager ldbManager;
     private String taxcode;
     
-    public PatientWindow(ClinicManagerEM m, MainWindow w, String t) {
+    public PatientWindow(ClinicManagerEM m, levelDBManager l, String t) {
         initComponents();
-        manager = m;
-        mWindow = w;
+        jpaManager = m;
+        ldbManager = l;
         taxcode = t;
     }
 
@@ -46,7 +46,7 @@ public class PatientWindow extends javax.swing.JFrame {
         ButtonDeleteaccount = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        ButtonLogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Patient");
@@ -64,11 +64,6 @@ public class PatientWindow extends javax.swing.JFrame {
         });
 
         TFPatient.setEnabled(false);
-        TFPatient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TFPatientActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("Tax code");
 
@@ -76,11 +71,6 @@ public class PatientWindow extends javax.swing.JFrame {
         ButtonDelete.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ButtonDeleteMouseClicked(evt);
-            }
-        });
-        ButtonDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonDeleteActionPerformed(evt);
             }
         });
 
@@ -116,15 +106,10 @@ public class PatientWindow extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setText("Logout");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        ButtonLogout.setText("Logout");
+        ButtonLogout.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
-            }
-        });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                ButtonLogoutMouseClicked(evt);
             }
         });
 
@@ -152,7 +137,7 @@ public class PatientWindow extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(ButtonLogout)
                 .addGap(202, 202, 202))
         );
         layout.setVerticalGroup(
@@ -170,7 +155,7 @@ public class PatientWindow extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(ButtonLogout)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -178,76 +163,85 @@ public class PatientWindow extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TFPatientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TFPatientActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TFPatientActionPerformed
-
     private void ButtonInfoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonInfoMouseClicked
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                PatientSignUp change_info = new PatientSignUp(manager);
-                change_info.setVisible(true);
-                change_info.setTitle("Patient Info");
-                change_info.set_taxcode(TFPatient.getText());
-                change_info.disable_textFields();
-                
-            }
-        });    
+
+        PatientSignUp change_info = new PatientSignUp(jpaManager, ldbManager, this);
+        change_info.setVisible(true);
+        change_info.setTitle("Patient Info");
+        change_info.set_taxcode(TFPatient.getText());
+        change_info.disable_textFields();       
     }//GEN-LAST:event_ButtonInfoMouseClicked
 
     private void ButtonDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonDeleteMouseClicked
         // TODO add your handling code here:
         int rowIndex = jTable1.getSelectedRow();
-        String visitID = jTable1.getValueAt(rowIndex, 0).toString();
-        Patient p = manager.readPatient(TFPatient.getText());
-        manager.deleteExamination(visitID);
-        
-        List<Examination> list = manager.readPatientExaminations(TFPatient.getText());
-        DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
-        d.setRowCount(0);
-        int num_col = 11;
-        Object[] row = new Object[num_col];
-        
-        for(int j=0; j<list.size(); ++j) {
-            Examination e = list.get(j);
-            row[0] = e.getId();
-            row[1] = e.getDoctor().getName();
-            row[2] = e.getDoctor().getSurname();
-            row[3] = e.getDoctor().getEmail();
-            row[4] = e.getPatient().getName();
-            row[5] = e.getPatient().getSurname();
-            row[6] = e.getPatient().getTaxCode();
-            row[7] = e.getPatient().getEmail();
-            row[8] = e.getDate();
-            row[9] = e.getType();
-            row[10] = e.getResult();
-            d.addRow(row);
+        if(rowIndex == -1) {
+            new ErrorWindow("Error: Select in the table the visit you want to remove.").setVisible(true);
+        }
+        else {
+            String visitID = jTable1.getValueAt(rowIndex, 0).toString();
+            //jpaManager.deleteExamination(visitID); //TO COMMENT
+            ldbManager.deleteExaminations(visitID);
+
+            ldbManager.dumpLevelDB();
+
+            //List<Examination> list = jpaManager.readPatientExaminations(TFPatient.getText());
+            List<Examination> list = ldbManager.readPatientExamination(TFPatient.getText());
+            DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
+            d.setRowCount(0);
+            int num_col = 11;
+            Object[] row = new Object[num_col];
+
+            for(int j=0; j<list.size(); ++j) {
+                Examination e = list.get(j);
+                row[0] = e.getId();
+                row[1] = e.getDoctor().getName();
+                row[2] = e.getDoctor().getSurname();
+                row[3] = e.getDoctor().getEmail();
+                row[4] = e.getPatient().getName();
+                row[5] = e.getPatient().getSurname();
+                row[6] = e.getPatient().getTaxCode();
+                row[7] = e.getPatient().getEmail();
+                row[8] = e.getDate();
+                row[9] = e.getType();
+                row[10] = e.getResult();
+                d.addRow(row);
+            }
         }
     }//GEN-LAST:event_ButtonDeleteMouseClicked
 
-    private void ButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDeleteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ButtonDeleteActionPerformed
-
     private void ButtonDeleteaccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonDeleteaccountMouseClicked
         // TODO add your handling code here:
-        manager.deletePatient(TFPatient.getText());
-        DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
-        d.setRowCount(0);
+        jpaManager.deletePatient(TFPatient.getText());
+        
+        List<Examination> list = ldbManager.readPatientExamination(TFPatient.getText());
+        for(int i=0; i<list.size(); ++i) {
+            Examination e = list.get(i);
+            ldbManager.deleteExaminations(Integer.toString(e.getId()));
+        }
+        
+        ldbManager.deletePatient(TFPatient.getText());
+        
+        
+ 
+        this.setVisible(false);
+        new MainWindow(jpaManager, ldbManager).setVisible(true);
+        
+        ldbManager.dumpLevelDB();
     }//GEN-LAST:event_ButtonDeleteaccountMouseClicked
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void ButtonLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLogoutMouseClicked
         // TODO add your handling code here:
-        mWindow.setVisible(true);
-        //this.setVisible(false);
-        this.dispose();
-    }//GEN-LAST:event_jButton1MouseClicked
+        new MainWindow(jpaManager, ldbManager).setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_ButtonLogoutMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         TFPatient.setText(taxcode);
-
-        List<Examination> list = manager.readPatientExaminations(TFPatient.getText());
+        
+        //List<Examination> list = jpaManager.readPatientExaminations(TFPatient.getText());
+        List<Examination> list = ldbManager.readPatientExamination(TFPatient.getText());
         DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
         d.setRowCount(0);
         int num_col = 11;
@@ -267,20 +261,39 @@ public class PatientWindow extends javax.swing.JFrame {
             row[9] = e.getType();
             row[10] = e.getResult();
             d.addRow(row);
-        }
+        }      
     }//GEN-LAST:event_formWindowOpened
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-
+    void updateTable(String patient) {
+        List<Examination> list = ldbManager.readPatientExamination(patient);
+        DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
+        d.setRowCount(0);
+        int num_col = 11;
+        Object[] row = new Object[num_col];
+        
+        for(int j=0; j<list.size(); ++j) {
+            Examination e = list.get(j);
+            row[0] = e.getId();
+            row[1] = e.getDoctor().getName();
+            row[2] = e.getDoctor().getSurname();
+            row[3] = e.getDoctor().getEmail();
+            row[4] = e.getPatient().getName();
+            row[5] = e.getPatient().getSurname();
+            row[6] = e.getPatient().getTaxCode();
+            row[7] = e.getPatient().getEmail();
+            row[8] = e.getDate();
+            row[9] = e.getType();
+            row[10] = e.getResult();
+            d.addRow(row);
+        }      
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonDelete;
     private javax.swing.JButton ButtonDeleteaccount;
     private javax.swing.JButton ButtonInfo;
+    private javax.swing.JButton ButtonLogout;
     private javax.swing.JTextField TFPatient;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

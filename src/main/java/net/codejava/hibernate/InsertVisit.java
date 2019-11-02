@@ -1,8 +1,5 @@
 package net.codejava.hibernate;
 
-import java.awt.Frame;
-import java.awt.Window;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -19,15 +16,17 @@ public class InsertVisit extends javax.swing.JFrame {
      * Creates new form InsertVisit
      */
     
-    private ClinicManagerEM manager;
+    private ClinicManagerEM jpaManager;
+    private levelDBManager ldbManager;
     private String docID;
     private String patient;
     private String date;
     private DoctorWindow docWind;
     
-    public InsertVisit(ClinicManagerEM m, String d, String p, String dt, DoctorWindow dw) {
+    public InsertVisit(ClinicManagerEM m, levelDBManager l, String d, String p, String dt, DoctorWindow dw) {
         initComponents();
-        manager = m;
+        jpaManager = m;
+        ldbManager = l;
         docID = d;
         patient = p;
         date = dt;
@@ -82,11 +81,6 @@ public class InsertVisit extends javax.swing.JFrame {
         SubmitButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 SubmitButtonMouseClicked(evt);
-            }
-        });
-        SubmitButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SubmitButtonActionPerformed(evt);
             }
         });
 
@@ -149,24 +143,28 @@ public class InsertVisit extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void SubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SubmitButtonActionPerformed
-
     private void SubmitButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SubmitButtonMouseClicked
         // TODO add your handling code here:
-        int id = manager.readPatient(patient).getPatientId();
-        manager.createExamination(id, Integer.parseInt(docID), TFType.getText(), CBResult.getSelectedItem().toString(), date);
-        docWind.updateTable(TFDocID.getText());
-        setVisible(false);
+        if(TFType.getText().equals("")) {
+            new ErrorWindow("Error: insert an examination type.").setVisible(true);
+        }
+        else {
+            Patient p = jpaManager.readPatient(patient);
+            int id = p.getPatientId();
+           // jpaManager.createExamination(id, Integer.parseInt(docID), TFType.getText(), CBResult.getSelectedItem().toString(), date); //TO COMMENT
+            ldbManager.putExamination(p.getTaxCode(), Integer.parseInt(docID), TFType.getText(), CBResult.getSelectedItem().toString(), date);
+            docWind.updateTable(docID);
+            setVisible(false);
+
+            ldbManager.dumpLevelDB();
+        }
     }//GEN-LAST:event_SubmitButtonMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         TFDocID.setText(docID);
         TFDate.setText(date);
-        TFPatient.setText(patient);
-        
+        TFPatient.setText(patient);       
     }//GEN-LAST:event_formWindowOpened
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -182,6 +180,4 @@ public class InsertVisit extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     // End of variables declaration//GEN-END:variables
-
-
 }

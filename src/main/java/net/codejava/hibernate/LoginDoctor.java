@@ -14,15 +14,17 @@ public class LoginDoctor extends javax.swing.JFrame {
     /**
      * Creates new form LoginDoctor
      */
-    private ClinicManagerEM manager;
-    private MainWindow mWindow;
+    private ClinicManagerEM jpaManager;
+    private levelDBManager ldbManager;
+    private MainWindow mainWind;
     
-    public LoginDoctor(ClinicManagerEM m, MainWindow w) {
+    public LoginDoctor(ClinicManagerEM m, levelDBManager l, MainWindow mw) {
         initComponents();
-        manager = m;
-        mWindow = w;
+        jpaManager = m;
+        ldbManager = l;
+        mainWind = mw;
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,25 +50,8 @@ public class LoginDoctor extends javax.swing.JFrame {
                 ButtonLoginMouseClicked(evt);
             }
         });
-        ButtonLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonLoginActionPerformed(evt);
-            }
-        });
-
-        PFPass.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PFPassActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("ID");
-
-        TFId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TFIdActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -108,27 +93,14 @@ public class LoginDoctor extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLoginActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ButtonLoginActionPerformed
-
-    private void PFPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PFPassActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PFPassActionPerformed
-
-    private void TFIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TFIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TFIdActionPerformed
-
     private void ButtonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLoginMouseClicked
         // TODO add your handling code here:
-        if(manager.loginDoctor(Integer.parseInt(TFId.getText()), PFPass.getText())) {
-            new DoctorWindow(manager, mWindow, TFId.getText()).setVisible(true);
-            //setVisible(false);
-            this.dispose();
+        if(jpaManager.loginDoctor(Integer.parseInt(TFId.getText()), PFPass.getText())) {
+            setVisible(false);
+            mainWind.setVisible(false);
+            new DoctorWindow(jpaManager, ldbManager, TFId.getText()).setVisible(true);
         }
     }//GEN-LAST:event_ButtonLoginMouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonLogin;

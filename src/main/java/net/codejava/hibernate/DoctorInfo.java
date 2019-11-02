@@ -15,18 +15,19 @@ public class DoctorInfo extends javax.swing.JFrame {
     /**
      * Creates new form DoctorInfo
      */
-    private ClinicManagerEM manager;
+    private ClinicManagerEM jpaManager;
+    private levelDBManager ldbManager;
+    private DoctorWindow docWind;
     private int id;
     
     
-    public DoctorInfo(ClinicManagerEM m) {
+    public DoctorInfo(ClinicManagerEM m, levelDBManager l, int i, DoctorWindow d) {
         initComponents();
-        manager = m;
-    }
-    
-    public void set_id(int i) {
+        jpaManager = m;
+        ldbManager = l;
+        docWind = d;
         id = i;
-    } 
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -45,7 +46,7 @@ public class DoctorInfo extends javax.swing.JFrame {
         TFDocID = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         TFDocMail = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        ButtonSave = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         PFPass = new javax.swing.JPasswordField();
 
@@ -78,15 +79,15 @@ public class DoctorInfo extends javax.swing.JFrame {
 
         jLabel4.setText("Email");
 
-        jButton1.setText("Save");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        ButtonSave.setText("Save");
+        ButtonSave.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                ButtonSaveMouseClicked(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        ButtonSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                ButtonSaveActionPerformed(evt);
             }
         });
 
@@ -114,7 +115,7 @@ public class DoctorInfo extends javax.swing.JFrame {
                 .addGap(30, 30, 30))
             .addGroup(layout.createSequentialGroup()
                 .addGap(168, 168, 168)
-                .addComponent(jButton1)
+                .addComponent(ButtonSave)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -141,7 +142,7 @@ public class DoctorInfo extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(TFDocMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(ButtonSave)
                 .addGap(27, 27, 27))
         );
 
@@ -149,9 +150,9 @@ public class DoctorInfo extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void ButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonSaveActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_ButtonSaveActionPerformed
 
     private void TFDocNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TFDocNameActionPerformed
         // TODO add your handling code here:
@@ -163,13 +164,13 @@ public class DoctorInfo extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        Doctor d = manager.readDoctor(id);
+        Doctor d = jpaManager.readDoctor(id);
         TFDocName.setText(d.getName());
         TFDocSurname.setText(d.getSurname());
         TFDocID.setText(Integer.toString(id));
     }//GEN-LAST:event_formWindowOpened
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void ButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSaveMouseClicked
         // TODO add your handling code here:
         String mail = TFDocMail.getText();
         if(mail.equals(""))
@@ -179,17 +180,22 @@ public class DoctorInfo extends javax.swing.JFrame {
         if(pass.equals(""))
             pass = null;
         
-        manager.updateDoctorInfo(id, mail, pass);
+        jpaManager.updateDoctorInfo(id, mail, pass);
+        ldbManager.updateDoctorInfo(id, mail);
+        
+        docWind.updateTable(Integer.toString(id));
         setVisible(false);
-    }//GEN-LAST:event_jButton1MouseClicked
+        
+        ldbManager.dumpLevelDB();
+    }//GEN-LAST:event_ButtonSaveMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonSave;
     private javax.swing.JPasswordField PFPass;
     private javax.swing.JTextField TFDocID;
     private javax.swing.JTextField TFDocMail;
     private javax.swing.JTextField TFDocName;
     private javax.swing.JTextField TFDocSurname;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
