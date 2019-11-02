@@ -268,10 +268,41 @@ public class levelDBManager {
 	
 	public void putDoctor(String name, String surname, String email){
 		String key = "doctorId:" + incrementAndGetDoctorId() + ":";
-                String s = get(key);
-                if(s!=null)
-                    return;
-		
+                
+                DBIterator iterator = levelDBStore.iterator();
+		iterator.seek(bytes("doctorId:")); // starts from the specified key
+		ArrayList<String> param = new ArrayList<>();
+		int i = 0;
+		while (iterator.hasNext()){
+			byte[] myKey = iterator.peekNext().getKey();
+			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
+			
+			String[] keySplit = asString(myKey).split(":"); // split the key
+			if (!keySplit[0].equals("doctorId")) { // breaking condition : prefix is not "doctorId"
+				break;
+			}
+			
+                        
+                        String value = asString(iterator.peekNext().getValue());
+                        if(keySplit[2].equals("email")){
+                            i=0;
+                            if(value.equals(email))
+                                i++;
+                        }                                                
+                        else if(keySplit[2].equals("name")){
+                            if(value.equals(name))
+                                i++;
+                        }                        
+                        else if(keySplit[2].equals("surname")){
+                            if(value.equals(surname))
+                                i++;
+                        }                        
+                        if(i==3){
+                            return;
+                        }                                            
+			iterator.next();
+                }
+                		
 		put(key+"name", name);
 		put(key+"surname", surname);
 		put(key+"email", email);	
