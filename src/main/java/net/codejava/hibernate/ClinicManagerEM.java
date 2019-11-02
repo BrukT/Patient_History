@@ -45,7 +45,7 @@ public class ClinicManagerEM {
 
 			Query query = entityManager.createQuery("SELECT p FROM Patient p WHERE p.taxCode = '" + taxCode + "'");
 			List<Patient> p = query.getResultList();
-			if (p.size() == 0) {
+			if (p.isEmpty()) {
 				entityManager.persist(patient);
 			} else {
 				throw new EntityExistsException();
@@ -71,7 +71,7 @@ public class ClinicManagerEM {
 			//find that patient
 			Query query = entityManager.createQuery("SELECT p FROM Patient p WHERE p.taxCode = '" + taxCode + "'");
 			List<Patient> patientList = query.getResultList();
-			if (patientList.size() != 0) {
+			if (!patientList.isEmpty()) {
 				Patient p = patientList.get(0);				
 				//able to update also 1 single field if you leave the other blank
 				if(city != null)
@@ -103,7 +103,7 @@ public class ClinicManagerEM {
 
 			Query query = entityManager.createQuery("SELECT p FROM Patient p WHERE p.taxCode = '" + taxCode + "'");
 			List<Patient> patientList = query.getResultList();
-			if(patientList.size() != 0){
+			if(!patientList.isEmpty()){
 				p = patientList.get(0);
 			}
 			else{
@@ -146,7 +146,7 @@ public class ClinicManagerEM {
 
 			Query query = entityManager.createQuery("SELECT p FROM Patient p WHERE p.taxCode = '" + taxCode + "'");
 			List<Patient> patientList = query.getResultList();
-			if(patientList.size() != 0){
+			if(!patientList.isEmpty()){
 				p = patientList.get(0);
 				System.out.println("Patient: "+p.getName()+" "+p.getSurname());
 				p.getExaminations().forEach((x) -> {
@@ -164,7 +164,10 @@ public class ClinicManagerEM {
 		} finally{
 			entityManager.getTransaction().commit();
 			entityManager.close();
-			return p.getExaminations();
+                        if(p!=null)
+                            return p.getExaminations();
+                        else
+                            return null;
 		}
 	}
 	
@@ -407,11 +410,13 @@ public class ClinicManagerEM {
 			System.out.println("Exception in readDoctorExaminations");
 		} finally{
                         
-			entityManager.getTransaction().commit();
-			entityManager.close();
-                        
+                    entityManager.getTransaction().commit();
+                    entityManager.close();
+                    if(d!=null) 
+                        return d.getExaminations();
+                    else 
+                        return null;
 		}                
-                return d.getExaminations();
 	}
 	
 	public void deleteDoctor(int doctorId) {

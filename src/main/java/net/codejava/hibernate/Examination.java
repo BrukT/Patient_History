@@ -5,11 +5,12 @@
  */
 package net.codejava.hibernate;
 
+import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "examination")
-public class Examination  {
+public class Examination implements Serializable  {
     @Column(name = "ExamId")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
