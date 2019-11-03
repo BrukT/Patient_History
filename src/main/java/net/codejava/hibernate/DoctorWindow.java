@@ -52,6 +52,7 @@ public class DoctorWindow extends javax.swing.JFrame {
         ButtonInfo = new javax.swing.JButton();
         ButtonResult = new javax.swing.JButton();
         ButtonLogout = new javax.swing.JButton();
+        ButtonDocTests = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Doctor");
@@ -129,6 +130,13 @@ public class DoctorWindow extends javax.swing.JFrame {
             }
         });
 
+        ButtonDocTests.setText("Show my tests");
+        ButtonDocTests.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ButtonDocTestsMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -141,7 +149,9 @@ public class DoctorWindow extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(TFDoc, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(50, 50, 50)
-                        .addComponent(ButtonInfo))
+                        .addComponent(ButtonInfo)
+                        .addGap(45, 45, 45)
+                        .addComponent(ButtonDocTests))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -169,7 +179,8 @@ public class DoctorWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(TFDoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ButtonInfo))
+                    .addComponent(ButtonInfo)
+                    .addComponent(ButtonDocTests))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -212,28 +223,29 @@ public class DoctorWindow extends javax.swing.JFrame {
         if(p == null) {
             new ErrorWindow("Error: insert a correct tax code!").setVisible(true);
         }
-        
-        //List<Examination> list = jpaManager.readPatientExaminations(TFPatient.getText());
-        List<Examination> list = ldbManager.readPatientExamination(TFPatient.getText());
-        DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
-        d.setRowCount(0);
-        int num_col = 11;
-        Object[] row = new Object[num_col];
-        
-        for(int j=0; j<list.size(); ++j) {
-            Examination e = list.get(j);
-            row[0] = e.getId();
-            row[1] = e.getDoctor().getName();
-            row[2] = e.getDoctor().getSurname();
-            row[3] = e.getDoctor().getEmail();
-            row[4] = e.getPatient().getName();
-            row[5] = e.getPatient().getSurname();
-            row[6] = e.getPatient().getPatientId();
-            row[7] = e.getPatient().getEmail();
-            row[8] = e.getDate();
-            row[9] = e.getType();
-            row[10] = e.getResult();
-            d.addRow(row);
+        else {
+            //List<Examination> list = jpaManager.readPatientExaminations(TFPatient.getText());
+            List<Examination> list = ldbManager.readPatientExamination(TFPatient.getText());
+            DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
+            d.setRowCount(0);
+            int num_col = 11;
+            Object[] row = new Object[num_col];
+
+            for(int j=0; j<list.size(); ++j) {
+                Examination e = list.get(j);
+                row[0] = e.getId();
+                row[1] = e.getDoctor().getName();
+                row[2] = e.getDoctor().getSurname();
+                row[3] = e.getDoctor().getEmail();
+                row[4] = e.getPatient().getName();
+                row[5] = e.getPatient().getSurname();
+                row[6] = e.getPatient().getPatientId();
+                row[7] = e.getPatient().getEmail();
+                row[8] = e.getDate();
+                row[9] = e.getType();
+                row[10] = e.getResult();
+                d.addRow(row);
+            }
         }
     }//GEN-LAST:event_ButtonPatientTestsMouseClicked
 
@@ -276,6 +288,33 @@ public class DoctorWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowOpened
 
+    private void ButtonDocTestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonDocTestsMouseClicked
+        // TODO add your handling code here:
+        
+        //List<Examination> list = jpaManager.readDoctorExaminations(Integer.parseInt(id));
+        List<Examination> list = ldbManager.readDoctorExamination(Integer.parseInt(TFDoc.getText()));
+        DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
+        d.setRowCount(0);
+        int num_col = 11;
+        Object[] row = new Object[num_col];
+        
+        for(int j=0; j<list.size(); ++j) {
+            Examination e = list.get(j);
+            row[0] = e.getId();
+            row[1] = e.getDoctor().getName();
+            row[2] = e.getDoctor().getSurname();
+            row[3] = e.getDoctor().getEmail();
+            row[4] = e.getPatient().getName();
+            row[5] = e.getPatient().getSurname();
+            row[6] = e.getPatient().getPatientId();
+            row[7] = e.getPatient().getEmail();
+            row[8] = e.getDate();
+            row[9] = e.getType();
+            row[10] = e.getResult();
+            d.addRow(row);
+        }
+    }//GEN-LAST:event_ButtonDocTestsMouseClicked
+
     public void updateTable(String id) {
         //List<Examination> list = jpaManager.readDoctorExaminations(Integer.parseInt(id));
         List<Examination> list = ldbManager.readDoctorExamination(Integer.parseInt(id));
@@ -302,6 +341,7 @@ public class DoctorWindow extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonDocTests;
     private javax.swing.JButton ButtonInfo;
     private javax.swing.JButton ButtonInsertTest;
     private javax.swing.JButton ButtonLogout;

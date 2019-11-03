@@ -36,6 +36,8 @@
                       <Component id="TFDoc" min="-2" pref="82" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                       <Component id="ButtonInfo" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                      <Component id="ButtonDocTests" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -71,6 +73,7 @@
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="TFDoc" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ButtonInfo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ButtonDocTests" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="31" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -237,6 +240,14 @@
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ButtonLogoutMouseClicked"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="ButtonDocTests">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Show my tests"/>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ButtonDocTestsMouseClicked"/>
       </Events>
     </Component>
   </SubComponents>
