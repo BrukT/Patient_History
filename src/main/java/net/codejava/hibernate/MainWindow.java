@@ -1,11 +1,16 @@
 package net.codejava.hibernate;
 
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author nicom
@@ -15,10 +20,9 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
-    
     private ClinicManagerEM jpaManager;
     private levelDBManager ldbManager;
-    
+
     public MainWindow(ClinicManagerEM m, levelDBManager l) {
         initComponents();
         jpaManager = m;
@@ -158,47 +162,56 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 
-
     //-----------------MAIN METHOD
     public static void main(String[] args) {
 
+        // code to run the program
+        System.out.println("-----Setup");
 
-            // code to run the program
-            System.out.println("-----");
-            System.out.println("Start");
+        ClinicManagerEM jpaManager = new ClinicManagerEM();
+        jpaManager.setup();
+        levelDBManager ldbManager = new levelDBManager();
+        ldbManager.init("mystore");
+        System.out.println("-----Begin");
+        
+        
+        populateDB(jpaManager, ldbManager);
+        
 
-            ClinicManagerEM jpaManager = new ClinicManagerEM();
-            jpaManager.setup();
+        ldbManager.dumpLevelDB();
 
-            System.out.println("-----");
+        System.out.println("-----End");
 
-            levelDBManager ldbManager = new levelDBManager();
-            ldbManager.init("mystore");
-
-            System.out.println("Current= doc:"+ldbManager.getDoctorId()+"\tex:"+ldbManager.getExaminationId()+"\tpat:"+ldbManager.getPatientId());
-
-            //create patients
-            jpaManager.createPatient("pietro", "ducange", "female", "pisa", "1980-01-23", "pietroducange@plasmon.it", "duc1", "pwd1");	
-            ldbManager.putPatient("pietro", "ducange", "pietroducange@plasmon.it", "duc1");
-
-            jpaManager.createPatient("enzo", "mingozzi", "male", "pisa", "1964-09-10", "enzomingozzi@skynet.com", "ming1", "pwd2");
-            ldbManager.putPatient("enzo", "mingozzi", "enzomingozzi@skynet.com", "ming1");
-
-            //create doctor
-            jpaManager.createDoctor(1, "Jack", "The Reaper", "aaa@bb.cc", "doc1");
-            ldbManager.putDoctor("Jack", "The Reaper", "aaa@bb.cc");
-            jpaManager.createDoctor(2, "Lord", "Voldemort", "tom.riddle@student.hogwarts.uk", "doc2");
-            ldbManager.putDoctor("Lord", "Voldemort", "tom.riddle@student.hogwarts.uk");
-
-            ldbManager.dumpLevelDB();
-
-            System.out.println("-----");
-
-            System.out.println("Finished");
-
-            MainWindow m = new MainWindow(jpaManager, ldbManager);
-            m.setVisible(true);
+        MainWindow m = new MainWindow(jpaManager, ldbManager);
+        m.setVisible(true);
 
     }
-      
+    
+    
+    private static void populateDB(ClinicManagerEM j, levelDBManager l){
+        Patient p = j.readPatient("mcl1");      //very naive check 
+        if(p==null){
+            System.out.println("Populating DB (relational and key-value)");
+            //create patients
+            j.createPatient("Austin", "McLean", "male", "pisa", "1980-01-23", "austin.mclean@mymail.it", "mcl1", "pwd1");
+            l.putPatient("Austin", "McLean", "austin.mclean@mymail.it", "mcl1");
+
+            j.createPatient("Paul", "Buckland", "male", "pisa", "1964-09-10", "paul.buckland@skynet.com", "bck1", "pwd2");
+            l.putPatient("Paul", "Buckland", "paul.buckland@skynet.com", "bck1");
+
+            j.createPatient("Jennifer", "Coleman", "female", "pisa", "1994-03-14", "jennifer.coleman@gmail.com", "clm1", "pwd3");
+            l.putPatient("Jennifer", "Coleman", "jennifer.coleman@gmail.com", "clm1");
+
+            //create doctor
+            j.createDoctor(1, "Irene", "Taylor", "irene.taylor@hospital.it", "doc1");
+            l.putDoctor("Irene", "Taylor", "irene.taylor@hospital.it");
+
+            j.createDoctor(2, "Lisa", "Oliver", "lisa.oliver@hospital.it", "doc2");
+            l.putDoctor("Lisa", "Oliver", "lisa.oliver@hospital.it");
+
+            j.createDoctor(2, "Tim", "Clarkson", "tim.clarkson@hospital.it", "doc3");
+            l.putDoctor("Tim", "Clarkson", "tim.clarkson@hospital.it");
+        }
+    }
+
 }

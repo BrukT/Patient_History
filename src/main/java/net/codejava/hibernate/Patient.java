@@ -9,16 +9,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.FetchProfile;
 
 @Entity
 @Table(name = "patient")
 public class Patient implements Serializable{
 
 	@Column(name = "patientId")
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int patientId;
-	private String taxCode;
+	@Id	
+	private String patientId;
 	private String name;
 	private String surname;
 	private String sex;
@@ -27,23 +27,15 @@ public class Patient implements Serializable{
 	private String email;
 	private String pwdHash;
 
-	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "patient", orphanRemoval = true, fetch = FetchType.LAZY)
 	private final List<Examination> examinations = new ArrayList<>();
 
-	public int getPatientId() {
+	public String getPatientId() {
 		return patientId;
 	}
 
-	public void setPatientId(int patientId) {
+	public void setPatientId(String patientId) {
 		this.patientId = patientId;
-	}
-
-	public String getTaxCode() {
-		return taxCode;
-	}
-
-	public void setTaxCode(String taxCode) {
-		this.taxCode = taxCode;
 	}
 
 	public String getName() {
@@ -104,7 +96,7 @@ public class Patient implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Patient{" + "patientId=" + patientId + ", taxCode=" + taxCode + ", name=" + name + ", surname=" + surname + ", sex=" + sex + ", birthDate=" + birthDate + ", city=" + city + ", email=" + email + '}';
+		return "Patient{" + "patientId=" + patientId + ", name=" + name + ", surname=" + surname + ", sex=" + sex + ", birthDate=" + birthDate + ", city=" + city + ", email=" + email + '}';
 	}
 
 	public List<Examination> getExaminations() {
@@ -116,7 +108,7 @@ public class Patient implements Serializable{
 	}
 	
 	public Patient(String taxCode, String name, String surname, String sex, String birthDate, String city, String email, String pwdHash) {		
-		this.taxCode = taxCode;
+		this.patientId = taxCode;
 		this.name = name;
 		this.surname = surname;
 		this.sex = sex;

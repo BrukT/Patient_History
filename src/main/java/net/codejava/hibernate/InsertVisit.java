@@ -150,9 +150,9 @@ public class InsertVisit extends javax.swing.JFrame {
         }
         else {
             Patient p = jpaManager.readPatient(patient);
-            int id = p.getPatientId();
-           // jpaManager.createExamination(id, Integer.parseInt(docID), TFType.getText(), CBResult.getSelectedItem().toString(), date); //TO COMMENT
-            ldbManager.putExamination(p.getTaxCode(), Integer.parseInt(docID), TFType.getText(), CBResult.getSelectedItem().toString(), date);
+            String id = p.getPatientId();
+            //jpaManager.createExamination(id, Integer.parseInt(docID), TFType.getText(), CBResult.getSelectedItem().toString(), date); //TO COMMENT
+            ldbManager.putExamination(p.getPatientId(), Integer.parseInt(docID), TFType.getText(), CBResult.getSelectedItem().toString(), date);
             docWind.updateTable(docID);
             setVisible(false);
 

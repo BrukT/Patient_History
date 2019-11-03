@@ -200,7 +200,7 @@ public class PatientWindow extends javax.swing.JFrame {
                 row[3] = e.getDoctor().getEmail();
                 row[4] = e.getPatient().getName();
                 row[5] = e.getPatient().getSurname();
-                row[6] = e.getPatient().getTaxCode();
+                row[6] = e.getPatient().getPatientId();
                 row[7] = e.getPatient().getEmail();
                 row[8] = e.getDate();
                 row[9] = e.getType();
@@ -255,7 +255,7 @@ public class PatientWindow extends javax.swing.JFrame {
             row[3] = e.getDoctor().getEmail();
             row[4] = e.getPatient().getName();
             row[5] = e.getPatient().getSurname();
-            row[6] = e.getPatient().getTaxCode();
+            row[6] = e.getPatient().getPatientId();
             row[7] = e.getPatient().getEmail();
             row[8] = e.getDate();
             row[9] = e.getType();
@@ -279,7 +279,7 @@ public class PatientWindow extends javax.swing.JFrame {
             row[3] = e.getDoctor().getEmail();
             row[4] = e.getPatient().getName();
             row[5] = e.getPatient().getSurname();
-            row[6] = e.getPatient().getTaxCode();
+            row[6] = e.getPatient().getPatientId();
             row[7] = e.getPatient().getEmail();
             row[8] = e.getDate();
             row[9] = e.getType();
