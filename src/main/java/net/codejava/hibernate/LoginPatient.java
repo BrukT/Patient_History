@@ -96,11 +96,22 @@ public class LoginPatient extends javax.swing.JFrame {
 
     private void ButtonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLoginMouseClicked
         // TODO add your handling code here:
-        if(jpaManager.loginPatient(TFTaxcode.getText(), PFPass.getText())) {
+        String tc = TFTaxcode.getText();
+        String ps = PFPass.getText();
+        
+        if(TFTaxcode.getText().equals(""))
+            tc = null;
+        
+        if(PFPass.getText().equals(""))
+            ps = null;
+        
+        if(jpaManager.loginPatient(tc, ps)) {
             setVisible(false);
             mainWind.setVisible(false);
-            new PatientWindow(jpaManager, ldbManager, TFTaxcode.getText()).setVisible(true);
-            
+            new PatientWindow(jpaManager, ldbManager, TFTaxcode.getText()).setVisible(true);     
+        }
+        else {
+            new ErrorWindow("Tax code and/or password are wrong").setVisible(true);
         }
     }//GEN-LAST:event_ButtonLoginMouseClicked
 

@@ -287,6 +287,9 @@ public class ClinicManagerEM {
     }
 	
 	public boolean loginDoctor(int doctorId, String pwd){
+                if(doctorId == -1 || pwd == null)
+                    return false;
+                
 		String pwdHash = Hash.getSHA256(pwd);
 		Doctor d = readDoctor(doctorId);
 		if(d == null) {	//no doctor found
