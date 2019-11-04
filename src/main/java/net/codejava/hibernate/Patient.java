@@ -9,8 +9,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.FetchProfile;
 
 @Entity
 @Table(name = "patient")
