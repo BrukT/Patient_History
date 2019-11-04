@@ -17,12 +17,10 @@ public class Examination implements Serializable  {
     private int examinationId;
        
     @ManyToOne()
-    //@MapsId("patientId")
     @JoinColumn(name = "patient")
     private Patient patient;
     
     @ManyToOne()
-   // @MapsId("doctorId")
     @JoinColumn(name = "doctor")
     private Doctor doctor;
     
