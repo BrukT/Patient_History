@@ -45,6 +45,8 @@ public class InsertResult extends javax.swing.JFrame {
         CBResult = new javax.swing.JComboBox<>();
         ButtonSave = new javax.swing.JButton();
 
+        setTitle("Insert result");
+
         jLabel1.setText("Visit ID");
 
         jLabel2.setText("Result");
