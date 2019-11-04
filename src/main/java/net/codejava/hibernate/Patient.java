@@ -25,7 +25,7 @@ public class Patient implements Serializable{
 	private String email;
 	private String pwdHash;
 
-	@OneToMany(mappedBy = "patient", orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "patient", orphanRemoval = true)
 	private final List<Examination> examinations = new ArrayList<>();
 
 	public String getPatientId() {

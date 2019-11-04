@@ -23,7 +23,7 @@ public class Doctor implements Serializable {
 	private String email;
 	private String pwdHash;
 
-	@OneToMany(mappedBy = "doctor", orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "doctor", orphanRemoval = true)
 	private final List<Examination> examinations = new ArrayList<>();
 
 	public int getDoctorId() {

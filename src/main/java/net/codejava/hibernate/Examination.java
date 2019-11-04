@@ -16,12 +16,12 @@ public class Examination implements Serializable  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int examinationId;
        
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     //@MapsId("patientId")
     @JoinColumn(name = "patient")
     private Patient patient;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
    // @MapsId("doctorId")
     @JoinColumn(name = "doctor")
     private Doctor doctor;
