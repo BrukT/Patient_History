@@ -185,19 +185,21 @@ public class MainWindow extends javax.swing.JFrame {
     
     
     private static void populateDB(ClinicManagerEM j, levelDBManager l){
-        Patient p = j.readPatient("mcl1");      //very naive check 
-        if(p==null){
+
+        Doctor d = j.readDoctor(1);
+        if(d==null) {
             System.out.println("Populating DB (relational and key-value)");
+           
             //create patients
             j.createPatient("Austin", "McLean", "male", "pisa", "1980-01-23", "austin.mclean@mymail.it", "mcl1", "pwd1");
             l.putPatient("Austin", "McLean", "austin.mclean@mymail.it", "mcl1");
-
+            
             j.createPatient("Paul", "Buckland", "male", "pisa", "1964-09-10", "paul.buckland@skynet.com", "bck1", "pwd2");
             l.putPatient("Paul", "Buckland", "paul.buckland@skynet.com", "bck1");
-
+            
             j.createPatient("Jennifer", "Coleman", "female", "pisa", "1994-03-14", "jennifer.coleman@gmail.com", "clm1", "pwd3");
             l.putPatient("Jennifer", "Coleman", "jennifer.coleman@gmail.com", "clm1");
-
+                    
             //create doctor
             j.createDoctor(1, "Irene", "Taylor", "irene.taylor@hospital.it", "doc1");
             l.putDoctor("Irene", "Taylor", "irene.taylor@hospital.it");
@@ -209,5 +211,4 @@ public class MainWindow extends javax.swing.JFrame {
             l.putDoctor("Tim", "Clarkson", "tim.clarkson@hospital.it");
         }
     }
-
 }
