@@ -76,11 +76,6 @@ public class MainWindow extends javax.swing.JFrame {
                 ButtonLoginDocMouseClicked(evt);
             }
         });
-        ButtonLoginDoc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonLoginDocActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,20 +128,19 @@ public class MainWindow extends javax.swing.JFrame {
         ldbManager.close();
     }//GEN-LAST:event_formWindowClosed
 
-    private void ButtonLoginDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLoginDocActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ButtonLoginDocActionPerformed
-
     private void ButtonSIgnupMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSIgnupMouseClicked
         new PatientSignUp(jpaManager, ldbManager).setVisible(true);
+        enable(false);
     }//GEN-LAST:event_ButtonSIgnupMouseClicked
 
     private void ButtonLoginPatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLoginPatMouseClicked
         new LoginPatient(jpaManager, ldbManager, this).setVisible(true);
+        enable(false);
     }//GEN-LAST:event_ButtonLoginPatMouseClicked
 
     private void ButtonLoginDocMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLoginDocMouseClicked
         new LoginDoctor(jpaManager, ldbManager, this).setVisible(true);
+        enable(false);
     }//GEN-LAST:event_ButtonLoginDocMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
