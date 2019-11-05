@@ -203,11 +203,17 @@ public class PatientSignUp extends javax.swing.JFrame {
         
         if(TFName.isEnabled()) {
             if(name != null && surname != null && sex != null && city != null && birth != null && mail != null && taxcode != null && pass != null) {
-                jpaManager.createPatient(name, surname, sex, city, birth, mail, taxcode, pass);
-                ldbManager.putPatient(name, surname, mail, taxcode);
+                Patient p = jpaManager.readPatient(taxcode);
+                if(p != null) {
+                    new ErrorWindow("Error: This taxcode is already used.").setVisible(true);
+                }
+                else {
+                    jpaManager.createPatient(name, surname, sex, city, birth, mail, taxcode, pass);
+                    ldbManager.putPatient(name, surname, mail, taxcode);
 
-                ldbManager.dumpLevelDB();
-                setVisible(false);
+                    ldbManager.dumpLevelDB();
+                    setVisible(false);
+                }
             }
             else {
                 new ErrorWindow("You must complete the entire form.").setVisible(true);

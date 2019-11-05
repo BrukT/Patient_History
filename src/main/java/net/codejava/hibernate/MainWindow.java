@@ -185,9 +185,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     
     private static void populateDB(ClinicManagerEM j, levelDBManager l){
-        j.createPatient("Jennifer", "Coleman", "female", "pisa", "1994-03-14", "jennifer.coleman@gmail.com", "clm1", "pwd3");
                     
-            //create doctor
         Doctor d = j.readDoctor(1);
         if(d==null) {
             System.out.println("Populating DB (relational and key-value)");
