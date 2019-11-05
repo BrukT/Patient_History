@@ -48,6 +48,7 @@ public class ClinicManagerEM {
             entityManager.getTransaction().commit();
         } catch (RollbackException e) {
             System.out.println("rollback exception (duplicate)");
+            entityManager.getTransaction().rollback();
         } catch (Exception e) {
             System.out.println("Exception in createPatient");
             entityManager.getTransaction().rollback();
@@ -209,7 +210,7 @@ public class ClinicManagerEM {
 	
 	//-----------------DOCTOR METHODS
 	
-    public void createDoctor(int doctorId, String name, String surname, String email, String pwd) {
+    public void createDoctor(String name, String surname, String email, String pwd) {
         Doctor doctor = new Doctor();
         doctor.setSurname(surname);
         doctor.setName(name);
@@ -224,6 +225,7 @@ public class ClinicManagerEM {
             entityManager.getTransaction().commit();
         } catch (RollbackException e) {
             System.out.println("rollback exception (duplicate)");
+            entityManager.getTransaction().rollback();
         } catch (Exception e) {
             System.out.println("Exception in createDoctor");
             entityManager.getTransaction().rollback();
