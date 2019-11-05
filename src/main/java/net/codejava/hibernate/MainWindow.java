@@ -202,11 +202,8 @@ public class MainWindow extends javax.swing.JFrame {
             l.putDoctor("Tim", "Clarkson", "tim.clarkson@hospital.it");
             
             //create examinations
-            j.createExamination("mcl1", 1, "Headache", "not available", "2019-11-05 06:53:27");
             l.putExamination("mcl1", 1, "Headache", "not available", "2019-11-05 06:53:27");
-            j.createExamination("mcl1", 1, "Fever", "negative", "2019-07-3 16:23:27");
             l.putExamination("mcl1", 1, "Fever", "negative", "2019-07-3 16:23:27");
-            j.createExamination("mcl1", 2, "Pneumonia", "positive", "2019-10-22 09:11:27");
             l.putExamination("mcl1", 2, "Pneumonia", "positive", "2019-10-22 09:11:27");
             
         }
