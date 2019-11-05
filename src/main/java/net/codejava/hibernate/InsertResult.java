@@ -102,7 +102,7 @@ public class InsertResult extends javax.swing.JFrame {
 
     private void ButtonSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSaveMouseClicked
         // TODO add your handling code here:
-      // jpaManager.updateExamination(Integer.parseInt(TFVisit.getText()), CBResult.getSelectedItem().toString()); //TO COMMENT
+      
         boolean check = false;
         List<Examination> list = ldbManager.readDoctorExamination(docid);
         for(int i=0; i<list.size(); ++i) {
@@ -117,6 +117,7 @@ public class InsertResult extends javax.swing.JFrame {
         }
         else {
             ldbManager.updateExamination(Integer.parseInt(TFVisit.getText()), CBResult.getSelectedItem().toString());
+            //jpaManager.updateExamination(Integer.parseInt(TFVisit.getText()), CBResult.getSelectedItem().toString()); //TO COMMENT
             docWind.updateTable(Integer.toString(docid));
             setVisible(false);
             ldbManager.dumpLevelDB();

@@ -341,7 +341,7 @@ public class levelDBManager {
 	
 	public String loginDoctor(int doctor, String pwd){
 		String proposedPwdHash = Hash.getSHA256(pwd);
-		String key = "patient:" + doctor + ":password";	
+		String key = "doctor:" + doctor + ":password";	
 		String pwdHash = get(key);	//null if no user	
 		if(pwdHash != null && pwdHash.equals(proposedPwdHash))
 			return Integer.toString(doctor);

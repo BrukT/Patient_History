@@ -185,7 +185,7 @@ public class ClinicManagerEM {
             entityManager.getTransaction().begin();
 
             
-            Examination e = entityManager.find(Examination.class, examinationId);
+            Examination e = entityManager.getReference(Examination.class, examinationId);
             if (e!=null) {
                 System.out.println("a");
                 entityManager.remove(e);
@@ -224,7 +224,6 @@ public class ClinicManagerEM {
             entityManager.getTransaction().commit();
         } catch (RollbackException e) {
             System.out.println("rollback exception (duplicate)");
-            entityManager.getTransaction().commit();
         } catch (Exception e) {
             System.out.println("Exception in createDoctor");
             entityManager.getTransaction().rollback();
@@ -317,14 +316,14 @@ public class ClinicManagerEM {
             entityManager.getTransaction().begin();
 
             //find the patient
-            Patient patient = entityManager.find(Patient.class, patientId);
+            Patient patient = entityManager.getReference(Patient.class, patientId);
             if (patient == null) {
                 throw new EntityNotFoundException();
             }
             examination.setPatient(patient);
 
             //find the doctor
-            Doctor doctor = entityManager.find(Doctor.class, doctorId);
+            Doctor doctor = entityManager.getReference(Doctor.class, doctorId);
             if (doctor == null) {
                 throw new EntityNotFoundException();
             }
