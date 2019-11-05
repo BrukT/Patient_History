@@ -81,7 +81,7 @@ public class levelDBManager {
 	
 	//put get delete shortcut to avoid to bytes() and asString() everytime we call
 	public void put(String key, String value){
-		levelDBStore.put(bytes(key), bytes(value));		
+		levelDBStore.put(bytes(key), bytes(value));	
 	}
 	
 	public String get(String key){
@@ -107,8 +107,7 @@ public class levelDBManager {
 	
 	public void close(){
 		try {
-			levelDBStore.close();
-			
+			levelDBStore.close();			
 		} catch (IOException ex) {
 			Logger.getLogger(levelDBManager.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -145,16 +144,14 @@ public class levelDBManager {
 	
 	//-----------------PATIENT METHODS
 	
-	public void putPatient(String name, String surname, String email, String taxCode){            
+	public void putPatient(String name, String surname, String email, String taxCode) {
 		String key = "patientId:" + taxCode + ":";
-		
-                String s = get(key);
-                if(s!=null)
-                    return;
-                
-		put(key+"name", name);
-		put(key+"surname", surname);
-		put(key+"email", email);				
+		String s = get(key+"name");
+		if (s != null) 
+			return;
+		put(key + "name", name);
+		put(key + "surname", surname);
+		put(key + "email", email);
 	}
 	
 	public void updatePatientInfo(String taxCode, String email) {
@@ -207,6 +204,8 @@ public class levelDBManager {
 			byte[] key = iterator.peekNext().getKey();
 			// key arrangement : examinationId:$examination_id:$patient_id:$doctor_id:$attribute_name = $value			
 			String[] keySplit = asString(key).split(":"); // split the key
+			if(!keySplit[0].equals("examinationId"))
+				break;
 			if(keySplit[2].equals(taxCode)){
 				byte[] value = iterator.peekNext().getValue();
 				//System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
@@ -269,7 +268,7 @@ public class levelDBManager {
 	public void putDoctor(String name, String surname, String email){
 		String key = "doctorId:" + incrementAndGetDoctorId() + ":";
                 
-                DBIterator iterator = levelDBStore.iterator();
+		DBIterator iterator = levelDBStore.iterator();
 		iterator.seek(bytes("doctorId:")); // starts from the specified key
 		ArrayList<String> param = new ArrayList<>();
 		int i = 0;
