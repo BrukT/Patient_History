@@ -21,9 +21,9 @@ import static org.iq80.leveldb.impl.Iq80DBFactory.bytes;
 public class levelDBManager {
 
 	private DB levelDBStore;
-	private int doctorId;
-	private int examinationId;
-	private int patientId;
+	private int doctor;
+	private int examination;
+	private int patient;
 	
 	//-----------------UTILITY METHODS
 		
@@ -33,35 +33,35 @@ public class levelDBManager {
 			levelDBStore = factory.open(new File(storeName), options);
 						
 			DBIterator iterator = levelDBStore.iterator();
-			iterator.seek(bytes("examinationId:")); // starts from the specified key			
-			examinationId = 0;
+			iterator.seek(bytes("examination:")); // starts from the specified key			
+			examination = 0;
 			while (iterator.hasNext()){
 				byte[] key = iterator.peekNext().getKey();
 				String[] keySplit = asString(key).split(":"); // split the key
-				if (!keySplit[0].equals("examinationId")) { 
+				if (!keySplit[0].equals("examination")) { 
 					break;
 				}
 				else{
-					examinationId = Integer.parseInt(keySplit[1]);
+					examination = Integer.parseInt(keySplit[1]);
 				}
 				iterator.next();				
 			}
 			
-			iterator.seek(bytes("doctorId:"));
-			doctorId = 0;
+			iterator.seek(bytes("doctor:"));
+			doctor = 0;
 			while (iterator.hasNext()){
 				byte[] key = iterator.peekNext().getKey();
 				String[] keySplit = asString(key).split(":"); // split the key
-				if (!keySplit[0].equals("doctorId")) {
+				if (!keySplit[0].equals("doctor")) {
 					break;
 				}
 				else{
-					doctorId = Integer.parseInt(keySplit[1]);
+					doctor = Integer.parseInt(keySplit[1]);
 				}
 				iterator.next();				
 			}
-			iterator.seek(bytes("patientId:"));
-			patientId = 0;
+			iterator.seek(bytes("patient:"));
+			patient = 0;
 			while (iterator.hasNext()){
 				byte[] key = iterator.peekNext().getKey();
 				String[] keySplit = asString(key).split(":"); // split the key
@@ -69,7 +69,7 @@ public class levelDBManager {
 					break;
 				}
 				else{
-					patientId = Integer.parseInt(keySplit[1]);
+					patient = Integer.parseInt(keySplit[1]);
 				}
 				iterator.next();				
 			}
@@ -114,30 +114,30 @@ public class levelDBManager {
 	}
 
 	public int getDoctorId() {
-		return doctorId;
+		return doctor;
 	}
 
 	public int getExaminationId() {
-		return examinationId;
+		return examination;
 	}
 	
 	public int getPatientId(){
-		return patientId;
+		return patient;
 	}
 	
 	public int incrementAndGetDoctorId(){
-		doctorId++;
-		return  doctorId;
+		doctor++;
+		return  doctor;
 	}
 	
 	public int incrementAndGetExaminationId(){
-		examinationId++;
-		return examinationId;
+		examination++;
+		return examination;
 	}
 	
 	public int incrementAndGetPatientId(){
-		patientId++;
-		return patientId;
+		patient++;
+		return patient;
 	}
 	
 	//-----------------END OF UTILITY METHODS
@@ -145,7 +145,7 @@ public class levelDBManager {
 	//-----------------PATIENT METHODS
 	
 	public void putPatient(String name, String surname, String email, String taxCode) {
-		String key = "patientId:" + taxCode + ":";
+		String key = "patient:" + taxCode + ":";
 		String s = get(key+"name");
 		if (s != null) 
 			return;
@@ -155,22 +155,22 @@ public class levelDBManager {
 	}
 	
 	public void updatePatientInfo(String taxCode, String email) {
-		String key = "patientId:" + taxCode + ":";
+		String key = "patient:" + taxCode + ":";
 		if(email != null)
 			put(key+"email", email);
 	}
 	
 	public Patient readPatient(String taxCode){
-		String myKey = "patientId:" + taxCode + ":";
+		String myKey = "patient:" + taxCode + ":";
 		DBIterator iterator = levelDBStore.iterator();
 		iterator.seek(bytes(myKey)); // starts from the specified key
 		ArrayList<String> param = new ArrayList<>();
 		int i = 0;
 		while (iterator.hasNext()){
 			byte[] key = iterator.peekNext().getKey();
-			// key arrangement : patientId:$patient_id:$attribute_name = $value
+			// key arrangement : patient:$patient_id:$attribute_name = $value
 			String[] keySplit = asString(key).split(":"); // split the key
-			if (!keySplit[0].equals("patientId") || !keySplit[1].equals(taxCode)) { // breaking condition : prefix is not "patientId:$patientId"
+			if (!keySplit[0].equals("patient") || !keySplit[1].equals(taxCode)) { // breaking condition : prefix is not "patient:$patient"
 				break;
 			}
 			byte[] value = iterator.peekNext().getValue();
@@ -185,7 +185,7 @@ public class levelDBManager {
 	
 	public String loginPatient(String taxCode, String pwd){
 		String proposedPwdHash = Hash.getSHA256(pwd);
-		String key = "patientId:" + taxCode + ":password";	
+		String key = "patient:" + taxCode + ":password";	
 		String pwdHash = get(key);	//null if no user	
 		if(pwdHash != null && pwdHash.equals(proposedPwdHash))
 			return taxCode;
@@ -194,7 +194,7 @@ public class levelDBManager {
 	}
 	
 	public List<Examination> readPatientExamination(String taxCode){
-		String myKey = "examinationId:";
+		String myKey = "examination:";
 		DBIterator iterator = levelDBStore.iterator();
 		iterator.seek(bytes(myKey)); // starts from the specified key
 		ArrayList<String> param = new ArrayList<>();
@@ -202,9 +202,9 @@ public class levelDBManager {
 		int i = 0;
 		while (iterator.hasNext()){
 			byte[] key = iterator.peekNext().getKey();
-			// key arrangement : examinationId:$examination_id:$patient_id:$doctor_id:$attribute_name = $value			
+			// key arrangement : examination:$examination_id:$patient_id:$doctor_id:$attribute_name = $value			
 			String[] keySplit = asString(key).split(":"); // split the key
-			if(!keySplit[0].equals("examinationId"))
+			if(!keySplit[0].equals("examination"))
 				break;
 			if(keySplit[2].equals(taxCode)){
 				byte[] value = iterator.peekNext().getValue();
@@ -231,14 +231,14 @@ public class levelDBManager {
 	}
 	
 	public void deletePatient(String taxCode) {
-		String myKey = "patientId:" + taxCode + ":";
+		String myKey = "patient:" + taxCode + ":";
 		DBIterator iterator = levelDBStore.iterator();
 		iterator.seek(bytes(myKey)); // starts from the specified key
 		while (iterator.hasNext()){
 			byte[] key = iterator.peekNext().getKey();
-			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
+			// key arrangement : doctor:$doctor_id:$attribute_name = $value
 			String[] keySplit = asString(key).split(":"); // split the key
-			if (!keySplit[0].equals("patientId") || !keySplit[1].equals(taxCode)) { // breaking condition : prefix is not "patientId:$patientId"
+			if (!keySplit[0].equals("patient") || !keySplit[1].equals(taxCode)) { // breaking condition : prefix is not "patient:$patient"
 				break;
 			}
 			delete(asString(key));
@@ -246,14 +246,14 @@ public class levelDBManager {
 		}
 	}
 	
-	public void deleteExaminations(String examinationId) {
-		String myKey = "examinationId:" + examinationId + ":";
+	public void deleteExaminations(String examination) {
+		String myKey = "examination:" + examination + ":";
 		DBIterator iterator = levelDBStore.iterator();
 		iterator.seek(bytes(myKey)); // starts from the specified key
 		while (iterator.hasNext()){
 			byte[] key = iterator.peekNext().getKey();			
 			String[] keySplit = asString(key).split(":"); // split the key
-			if (!keySplit[0].equals("examinationId") || !keySplit[1].equals(examinationId)) { // breaking condition : prefix is not "examinationId:$examinationId"
+			if (!keySplit[0].equals("examination") || !keySplit[1].equals(examination)) { // breaking condition : prefix is not "examination:$examination"
 				break;
 			}
 			delete(asString(key));			
@@ -266,18 +266,18 @@ public class levelDBManager {
 	//-----------------DOCTOR METHODS
 	
 	public void putDoctor(String name, String surname, String email){
-		String key = "doctorId:" + incrementAndGetDoctorId() + ":";
+		String key = "doctor:" + incrementAndGetDoctorId() + ":";
                 
 		DBIterator iterator = levelDBStore.iterator();
-		iterator.seek(bytes("doctorId:")); // starts from the specified key
+		iterator.seek(bytes("doctor:")); // starts from the specified key
 		ArrayList<String> param = new ArrayList<>();
 		int i = 0;
 		while (iterator.hasNext()){
 			byte[] myKey = iterator.peekNext().getKey();
-			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
+			// key arrangement : doctor:$doctor_id:$attribute_name = $value
 			
 			String[] keySplit = asString(myKey).split(":"); // split the key
-			if (!keySplit[0].equals("doctorId")) { // breaking condition : prefix is not "doctorId"
+			if (!keySplit[0].equals("doctor")) { // breaking condition : prefix is not "doctor"
 				break;
 			}
 			
@@ -307,24 +307,24 @@ public class levelDBManager {
 		put(key+"email", email);	
 	}
 	
-	public void updateDoctorInfo(int doctorId, String email) {
-		String key = "doctorId:" + doctorId + ":";		
+	public void updateDoctorInfo(int doctor, String email) {
+		String key = "doctor:" + doctor + ":";		
 		if(email != null)
 			put(key+"email", email);
 	}
 	
-	public Doctor readDoctor(int doctorId){
-		String myKey = "doctorId:" + doctorId + ":";
+	public Doctor readDoctor(int doctor){
+		String myKey = "doctor:" + doctor + ":";
 		DBIterator iterator = levelDBStore.iterator();
 		iterator.seek(bytes(myKey)); // starts from the specified key
 		ArrayList<String> param = new ArrayList<>();
 		int i = 0;
 		while (iterator.hasNext()){
 			byte[] key = iterator.peekNext().getKey();
-			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
+			// key arrangement : doctor:$doctor_id:$attribute_name = $value
 			
 			String[] keySplit = asString(key).split(":"); // split the key
-			if (!keySplit[0].equals("doctorId") || !keySplit[1].equals(Integer.toString(doctorId))) { // breaking condition : prefix is not "doctorId:$doctorId"
+			if (!keySplit[0].equals("doctor") || !keySplit[1].equals(Integer.toString(doctor))) { // breaking condition : prefix is not "doctor:$doctor"
 				break;
 			}
 			
@@ -335,39 +335,39 @@ public class levelDBManager {
 			i++;
 		}
 		
-		Doctor d = new Doctor(doctorId, param.get(1), param.get(2), param.get(0), null);
+		Doctor d = new Doctor(doctor, param.get(1), param.get(2), param.get(0), null);
 		return d;
 	}
 	
-	public String loginDoctor(int doctorId, String pwd){
+	public String loginDoctor(int doctor, String pwd){
 		String proposedPwdHash = Hash.getSHA256(pwd);
-		String key = "patientId:" + doctorId + ":password";	
+		String key = "patient:" + doctor + ":password";	
 		String pwdHash = get(key);	//null if no user	
 		if(pwdHash != null && pwdHash.equals(proposedPwdHash))
-			return Integer.toString(doctorId);
+			return Integer.toString(doctor);
 		else
 			return null;
                 
 	}
         
-	public void putExamination(String taxCode, int doctorId, String type, String result, String examDate){
-		String key = "examinationId:" + incrementAndGetExaminationId() + ":" + taxCode + ":" + doctorId + ":";
+	public void putExamination(String taxCode, int doctor, String type, String result, String examDate){
+		String key = "examination:" + incrementAndGetExaminationId() + ":" + taxCode + ":" + doctor + ":";
 		
 		put(key+"examDate", examDate);
 		put(key+"type", type);
 		put(key+"result", result);
 	}	
 	
-	public void updateExamination(int examinationId, String result){
-		String myKey = "examinationId:" + examinationId + ":";
+	public void updateExamination(int examination, String result){
+		String myKey = "examination:" + examination + ":";
 		DBIterator iterator = levelDBStore.iterator();
 		iterator.seek(bytes(myKey)); // starts from the specified key		
 		while (iterator.hasNext()){
 			byte[] key = iterator.peekNext().getKey();
-			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
+			// key arrangement : doctor:$doctor_id:$attribute_name = $value
 			
 			String[] keySplit = asString(key).split(":"); // split the key
-			if (!keySplit[0].equals("examinationId") || !keySplit[1].equals(Integer.toString(examinationId))) { 
+			if (!keySplit[0].equals("examination") || !keySplit[1].equals(Integer.toString(examination))) { 
 				break;
 			}
 			else if(keySplit[4].equals("result")){
@@ -378,8 +378,8 @@ public class levelDBManager {
 		}
 	}
 	
-	public List<Examination> readDoctorExamination(int doctorId){
-		String myKey = "examinationId:";
+	public List<Examination> readDoctorExamination(int doctor){
+		String myKey = "examination:";
 		DBIterator iterator = levelDBStore.iterator();
 		iterator.seek(bytes(myKey)); // starts from the specified key
 		ArrayList<String> param = new ArrayList<>();
@@ -387,11 +387,11 @@ public class levelDBManager {
 		int i = 0;
 		while (iterator.hasNext()){
 			byte[] key = iterator.peekNext().getKey();
-			// key arrangement : examinationId:$examination_id:$patient_id:$doctor_id:$attribute_name = $value			
+			// key arrangement : examination:$examination_id:$patient_id:$doctor_id:$attribute_name = $value			
 			String[] keySplit = asString(key).split(":"); // split the key
-			if(!keySplit[0].equals("examinationId"))
+			if(!keySplit[0].equals("examination"))
 				break;
-			if(keySplit[3].equals(Integer.toString(doctorId))){
+			if(keySplit[3].equals(Integer.toString(doctor))){
 				byte[] value = iterator.peekNext().getValue();
 				//System.out.println("-> "+asString(key) + "\t|\t"+asString(value));
 				param.add(asString(value));
@@ -418,15 +418,15 @@ public class levelDBManager {
 		return examinations;
 	}
 	
-	public void deleteDoctor(int doctorId) {
-		String myKey = "doctorId:" + doctorId + ":";
+	public void deleteDoctor(int doctor) {
+		String myKey = "doctor:" + doctor + ":";
 		DBIterator iterator = levelDBStore.iterator();
 		iterator.seek(bytes(myKey)); // starts from the specified key
 		while (iterator.hasNext()){
 			byte[] key = iterator.peekNext().getKey();
-			// key arrangement : doctorId:$doctor_id:$attribute_name = $value
+			// key arrangement : doctor:$doctor_id:$attribute_name = $value
 			String[] keySplit = asString(key).split(":"); // split the key
-			if (!keySplit[0].equals("doctorId") || !keySplit[1].equals(Integer.toString(doctorId))) { 
+			if (!keySplit[0].equals("doctor") || !keySplit[1].equals(Integer.toString(doctor))) { 
 				break;
 			}
 			delete(asString(key));
