@@ -130,17 +130,14 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void ButtonSIgnupMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSIgnupMouseClicked
         new PatientSignUp(jpaManager, ldbManager).setVisible(true);
-        enable(false);
     }//GEN-LAST:event_ButtonSIgnupMouseClicked
 
     private void ButtonLoginPatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLoginPatMouseClicked
         new LoginPatient(jpaManager, ldbManager, this).setVisible(true);
-        enable(false);
     }//GEN-LAST:event_ButtonLoginPatMouseClicked
 
     private void ButtonLoginDocMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonLoginDocMouseClicked
         new LoginDoctor(jpaManager, ldbManager, this).setVisible(true);
-        enable(false);
     }//GEN-LAST:event_ButtonLoginDocMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
