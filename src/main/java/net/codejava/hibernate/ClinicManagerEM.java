@@ -119,7 +119,7 @@ public class ClinicManagerEM {
             return false;
         }
         String patientPwdHash = p.getPwdHash();
-        System.out.println(patientPwdHash + "  vs  "+pwdHash);
+       // System.out.println(patientPwdHash + "  vs  "+pwdHash);
         if (pwdHash.equals(patientPwdHash)) {
             return true;
         } else {
