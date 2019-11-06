@@ -51,6 +51,7 @@ public class DoctorInfo extends javax.swing.JFrame {
         PFPass = new javax.swing.JPasswordField();
 
         setTitle("Doctor Info");
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);

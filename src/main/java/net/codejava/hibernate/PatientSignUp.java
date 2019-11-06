@@ -62,6 +62,7 @@ public class PatientSignUp extends javax.swing.JFrame {
         PFPass = new javax.swing.JPasswordField();
 
         setTitle("Sign Up");
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);

@@ -36,6 +36,7 @@ public class ErrorWindow extends javax.swing.JFrame {
         ButtonOK = new javax.swing.JButton();
 
         setTitle("Error");
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);

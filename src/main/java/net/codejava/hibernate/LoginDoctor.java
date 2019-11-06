@@ -41,6 +41,7 @@ public class LoginDoctor extends javax.swing.JFrame {
         TFId = new javax.swing.JTextField();
 
         setTitle("Doctor Login");
+        setResizable(false);
 
         jLabel2.setText("Password");
 

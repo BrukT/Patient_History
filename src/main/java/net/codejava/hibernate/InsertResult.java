@@ -46,6 +46,7 @@ public class InsertResult extends javax.swing.JFrame {
         ButtonSave = new javax.swing.JButton();
 
         setTitle("Insert result");
+        setResizable(false);
 
         jLabel1.setText("Visit ID");
 

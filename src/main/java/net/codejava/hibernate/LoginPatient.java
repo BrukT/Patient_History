@@ -42,6 +42,7 @@ public class LoginPatient extends javax.swing.JFrame {
         PFPass = new javax.swing.JPasswordField();
 
         setTitle("Patient Login");
+        setResizable(false);
 
         jLabel1.setText("Tax code");
 
